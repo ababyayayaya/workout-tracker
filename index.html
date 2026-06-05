@@ -10,69 +10,37 @@
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-192.png">
 <title>Workout Tracker</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #0a0a0a;
-  --bg2: #141414;
-  --bg3: #1c1c1c;
-  --border: rgba(255,255,255,0.08);
-  --border2: rgba(255,255,255,0.14);
-  --text: #f0f0f0;
-  --text2: #888;
-  --text3: #555;
-  --accent: #e8f54e;
-  --accent-dim: rgba(232,245,78,0.12);
-  --accent-text: #0a0a0a;
-  --blue: #4ea8f5;
-  --blue-dim: rgba(78,168,245,0.12);
+  --bg: #0a0a0a; --bg2: #141414; --bg3: #1c1c1c;
+  --border: rgba(255,255,255,0.08); --border2: rgba(255,255,255,0.14);
+  --text: #f0f0f0; --text2: #888; --text3: #555;
+  --accent: #e8f54e; --accent-dim: rgba(232,245,78,0.12); --accent-text: #0a0a0a;
+  --blue: #4ea8f5; --blue-dim: rgba(78,168,245,0.12);
   --red: #f5694e;
-  --green: #4ef587;
-  --green-dim: rgba(78,245,135,0.1);
-  --radius: 12px;
-  --radius-sm: 8px;
-  --safe-top: env(safe-area-inset-top, 0px);
-  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --radius: 12px; --radius-sm: 8px;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; }
-
-/* Layout */
+html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(--text); font-family: -apple-system, 'Helvetica Neue', sans-serif; }
 #app { height: 100dvh; display: flex; flex-direction: column; }
-.nav { flex-shrink: 0; display: flex; background: var(--bg2); border-top: 0.5px solid var(--border); padding-bottom: var(--safe-bottom); }
+.nav { flex-shrink: 0; display: flex; background: var(--bg2); border-top: 0.5px solid var(--border); padding-bottom: env(safe-area-inset-bottom, 0px); }
 .nav-btn { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 10px 4px 8px; background: none; border: none; color: var(--text3); cursor: pointer; font-family: inherit; font-size: 10px; letter-spacing: 0.03em; transition: color 0.15s; }
 .nav-btn svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
 .nav-btn.active { color: var(--accent); }
-
 .screens { flex: 1; overflow: hidden; position: relative; }
-.screen { position: absolute; inset: 0; overflow-y: auto; display: none; padding-top: var(--safe-top); }
+.screen { position: absolute; inset: 0; overflow-y: auto; display: none; padding-top: env(safe-area-inset-top, 0px); }
 .screen.active { display: block; }
-
-/* Typography */
-.mono { font-family: 'DM Mono', monospace; }
-h1 { font-size: 22px; font-weight: 500; letter-spacing: -0.02em; }
-h2 { font-size: 16px; font-weight: 500; }
-
-/* Header */
 .page-header { padding: 20px 20px 16px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; background: var(--bg); z-index: 5; border-bottom: 0.5px solid var(--border); }
-
-/* Buttons */
+h1 { font-size: 22px; font-weight: 500; letter-spacing: -0.02em; }
 .btn { border: none; border-radius: var(--radius-sm); padding: 10px 16px; font-family: inherit; font-size: 14px; font-weight: 500; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: opacity 0.15s, transform 0.1s; }
 .btn:active { transform: scale(0.97); }
 .btn-accent { background: var(--accent); color: var(--accent-text); }
 .btn-ghost { background: var(--bg3); color: var(--text); border: 0.5px solid var(--border2); }
-.btn-danger { background: none; border: none; color: var(--red); padding: 6px; cursor: pointer; }
 .btn-icon { background: var(--bg3); border: 0.5px solid var(--border); border-radius: var(--radius-sm); width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text2); }
 .btn-icon svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
-
-/* Cards */
-.card { background: var(--bg2); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 16px; margin: 0 16px 10px; }
+.card { background: var(--bg2); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 14px; margin: 0 16px 10px; }
 .card-tap { cursor: pointer; transition: background 0.15s; }
 .card-tap:active { background: var(--bg3); }
-
-/* Tags */
 .tag { display: inline-flex; align-items: center; font-size: 11px; font-weight: 500; padding: 3px 8px; border-radius: 99px; letter-spacing: 0.02em; }
 .tag-chest { background: rgba(245,105,78,0.15); color: #f5694e; }
 .tag-back { background: rgba(78,168,245,0.15); color: #4ea8f5; }
@@ -81,101 +49,72 @@ h2 { font-size: 16px; font-weight: 500; }
 .tag-arms { background: rgba(245,180,78,0.15); color: #f5b44e; }
 .tag-core { background: rgba(180,78,245,0.15); color: #b44ef5; }
 .tag-cardio { background: rgba(245,78,180,0.15); color: #f54eb4; }
-
-/* Form */
-.form-group { margin-bottom: 16px; }
 .form-label { font-size: 11px; color: var(--text2); letter-spacing: 0.06em; text-transform: uppercase; display: block; margin-bottom: 8px; }
 input[type=text], input[type=date], input[type=number], select {
-  width: 100%; padding: 12px 14px; background: var(--bg3); border: 0.5px solid var(--border2); border-radius: var(--radius-sm);
-  color: var(--text); font-family: inherit; font-size: 15px; outline: none; -webkit-appearance: none; appearance: none;
-  transition: border-color 0.15s;
+  width: 100%; padding: 11px 14px; background: var(--bg3); border: 0.5px solid var(--border2); border-radius: var(--radius-sm);
+  color: var(--text); font-family: inherit; font-size: 15px; outline: none; -webkit-appearance: none; appearance: none; transition: border-color 0.15s;
 }
 input:focus, select:focus { border-color: var(--accent); }
 select option { background: var(--bg3); }
-
-/* Set row */
-.set-header-row { display: grid; grid-template-columns: 28px 1fr 1fr 60px 32px; gap: 6px; padding: 0 20px; margin-bottom: 6px; }
-.set-col-label { font-size: 10px; color: var(--text3); text-align: center; letter-spacing: 0.04em; text-transform: uppercase; }
-.set-row { display: grid; grid-template-columns: 28px 1fr 1fr 60px 32px; gap: 6px; padding: 0 20px; margin-bottom: 8px; align-items: center; }
-.set-num { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--text3); text-align: center; }
-.set-input { background: var(--bg3); border: 0.5px solid var(--border); border-radius: var(--radius-sm); color: var(--text); font-family: 'DM Mono', monospace; font-size: 15px; text-align: center; padding: 10px 6px; width: 100%; outline: none; -webkit-appearance: none; appearance: none; }
-.set-input:focus { border-color: var(--accent); }
-.set-rm { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--blue); text-align: center; }
-.set-del { background: none; border: none; color: var(--text3); cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 4px; }
-.set-del svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
-
-/* Summary bars */
-.summary-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; border-radius: var(--radius-sm); margin: 6px 20px; }
-.summary-bar.vol { background: var(--bg3); }
-.summary-bar.rm { background: var(--blue-dim); }
-.summary-label { font-size: 12px; color: var(--text2); }
-.summary-val { font-family: 'DM Mono', monospace; font-size: 14px; font-weight: 500; }
-.summary-bar.rm .summary-val { color: var(--blue); }
-
-/* Prev record */
-.prev-box { background: var(--blue-dim); border: 0.5px solid rgba(78,168,245,0.2); border-radius: var(--radius-sm); padding: 10px 14px; margin-bottom: 14px; font-size: 13px; color: var(--blue); }
-
-/* Calendar */
-.cal-nav { display: flex; align-items: center; justify-content: space-between; padding: 20px 20px 12px; }
-.cal-month { font-size: 18px; font-weight: 500; }
-.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; padding: 0 12px 12px; }
-.cal-day-label { font-size: 10px; color: var(--text3); text-align: center; padding: 6px 0; letter-spacing: 0.04em; }
-.cal-day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; font-size: 13px; font-family: 'DM Mono', monospace; cursor: pointer; border-radius: 50%; color: var(--text2); transition: background 0.1s; }
-.cal-day:active { background: var(--bg3); }
-.cal-day.has-workout { background: var(--accent); color: var(--accent-text); font-weight: 500; }
-.cal-day.today:not(.has-workout) { border: 1px solid var(--text3); color: var(--text); }
-.cal-day.other-month { color: var(--text3); opacity: 0.4; }
-
-/* Exercise chips */
-.set-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
-.set-chip { font-family: 'DM Mono', monospace; font-size: 11px; background: var(--bg3); padding: 4px 9px; border-radius: 99px; color: var(--text2); }
-.rm-inline { color: var(--blue); }
-
-/* Stats */
-.stat-metric { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 0.5px solid var(--border); }
-.stat-metric:last-child { border-bottom: none; }
-.pr-val { font-family: 'DM Mono', monospace; font-size: 16px; font-weight: 500; color: var(--accent); }
-
-/* Modal */
 .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 100; align-items: flex-end; }
 .modal-overlay.open { display: flex; }
-.modal { background: var(--bg2); border-radius: 20px 20px 0 0; border-top: 0.5px solid var(--border2); width: 100%; max-height: 92dvh; overflow-y: auto; padding: 0 0 calc(20px + var(--safe-bottom)); animation: slideUp 0.28s cubic-bezier(0.32,0.72,0,1); }
+.modal { background: var(--bg2); border-radius: 20px 20px 0 0; border-top: 0.5px solid var(--border2); width: 100%; max-height: 88dvh; overflow-y: auto; padding: 0 0 calc(24px + env(safe-area-inset-bottom, 0px)); animation: slideUp 0.26s cubic-bezier(0.32,0.72,0,1); }
 @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-.modal-handle { width: 36px; height: 4px; background: var(--border2); border-radius: 2px; margin: 14px auto 20px; }
+.modal-handle { width: 36px; height: 4px; background: var(--border2); border-radius: 2px; margin: 14px auto 18px; }
 .modal-title { font-size: 16px; font-weight: 500; padding: 0 20px 16px; }
 .modal-body { padding: 0 20px; }
 .modal-footer { display: flex; gap: 10px; padding: 16px 20px 0; }
-
-/* Pill badge */
-.pill { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; padding: 4px 10px; border-radius: 99px; font-weight: 500; }
-.pill-rm { background: var(--blue-dim); color: var(--blue); font-family: 'DM Mono', monospace; }
-.pill-accent { background: var(--accent-dim); color: var(--accent); font-family: 'DM Mono', monospace; }
-
-/* Empty */
+.cal-nav { display: flex; align-items: center; justify-content: space-between; padding: 20px 20px 12px; }
+.cal-month { font-size: 18px; font-weight: 500; font-variant-numeric: tabular-nums; }
+.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; padding: 0 12px 12px; }
+.cal-day-label { font-size: 10px; color: var(--text3); text-align: center; padding: 6px 0; }
+.cal-day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; font-size: 13px; cursor: pointer; border-radius: 50%; color: var(--text2); transition: background 0.1s; font-variant-numeric: tabular-nums; }
+.cal-day.has-workout { background: var(--accent); color: var(--accent-text); font-weight: 500; }
+.cal-day.today:not(.has-workout) { border: 1px solid var(--text3); color: var(--text); }
+.cal-day.other-month { color: var(--text3); opacity: 0.4; }
 .empty { text-align: center; padding: 60px 24px; color: var(--text3); }
-.empty-icon { font-size: 36px; margin-bottom: 12px; opacity: 0.4; }
-
-/* Scrollbar */
 ::-webkit-scrollbar { width: 0; }
-
-/* Export/Import */
+.rec-date-bar { display: flex; align-items: center; gap: 10px; padding: 14px 16px; border-bottom: 0.5px solid var(--border); background: var(--bg); position: sticky; top: 0; z-index: 4; }
+.rec-date-bar input[type=date] { flex: 1; font-size: 14px; padding: 8px 12px; }
+.ex-card { background: var(--bg2); border: 0.5px solid var(--border); border-radius: var(--radius); margin: 12px 16px 0; overflow: hidden; }
+.ex-card-header { display: flex; justify-content: space-between; align-items: center; padding: 12px 14px 10px; }
+.ex-card-title { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.ex-card-body { padding: 0 14px 4px; }
+.set-list { margin-bottom: 6px; }
+.set-item { display: grid; grid-template-columns: 22px 1fr 1fr 56px 28px; gap: 6px; align-items: center; padding: 5px 0; border-bottom: 0.5px solid var(--border); }
+.set-item:last-child { border-bottom: none; }
+.set-n { font-size: 11px; color: var(--text3); text-align: center; font-variant-numeric: tabular-nums; }
+.set-val { font-size: 13px; font-variant-numeric: tabular-nums; text-align: center; color: var(--text); }
+.set-rm-val { font-size: 11px; color: var(--blue); text-align: center; font-variant-numeric: tabular-nums; }
+.set-del-btn { background: none; border: none; color: var(--text3); cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 4px; }
+.set-del-btn svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; }
+.set-col-header { display: grid; grid-template-columns: 22px 1fr 1fr 56px 28px; gap: 6px; padding: 4px 0 2px; }
+.set-col-label { font-size: 10px; color: var(--text3); text-align: center; letter-spacing: 0.04em; }
+.set-input-row { display: grid; grid-template-columns: 22px 1fr 1fr 56px 28px; gap: 6px; align-items: center; padding: 6px 0; }
+.set-input-row .set-n { color: var(--accent); }
+.set-mini-input { background: var(--bg3); border: 0.5px solid var(--border2); border-radius: 6px; color: var(--text); font-size: 14px; text-align: center; padding: 8px 4px; width: 100%; outline: none; -webkit-appearance: none; font-family: inherit; font-variant-numeric: tabular-nums; }
+.set-mini-input:focus { border-color: var(--accent); }
+.set-confirm-btn { background: var(--accent); border: none; border-radius: 6px; width: 28px; height: 36px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+.set-confirm-btn svg { width: 14px; height: 14px; stroke: var(--accent-text); fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+.add-set-btn { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--text2); background: none; border: none; cursor: pointer; padding: 10px 0 12px; width: 100%; font-family: inherit; }
+.ex-vol { font-size: 11px; color: var(--text3); padding: 4px 0 10px; display: flex; gap: 12px; }
+.ex-vol span { color: var(--text2); }
+.add-ex-wrap { padding: 10px 16px 24px; }
+.stat-metric { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 0.5px solid var(--border); }
+.stat-metric:last-child { border-bottom: none; }
+.pr-val { font-size: 16px; font-weight: 500; color: var(--accent); font-variant-numeric: tabular-nums; }
 .data-actions { display: flex; gap: 10px; padding: 0 16px 16px; }
+.prev-box { background: var(--blue-dim); border: 0.5px solid rgba(78,168,245,0.2); border-radius: var(--radius-sm); padding: 9px 12px; margin-bottom: 12px; font-size: 12px; color: var(--blue); }
 </style>
 </head>
 <body>
 <div id="app">
   <div class="screens">
-
-    <!-- カレンダー -->
     <div class="screen active" id="screen-home">
       <div class="cal-nav">
-        <button class="btn-icon" onclick="changeMonth(-1)">
-          <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
-        </button>
-        <span class="cal-month mono" id="cal-title"></span>
-        <button class="btn-icon" onclick="changeMonth(1)">
-          <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
-        </button>
+        <button class="btn-icon" onclick="changeMonth(-1)"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button>
+        <span class="cal-month" id="cal-title"></span>
+        <button class="btn-icon" onclick="changeMonth(1)"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
       </div>
       <div class="cal-grid">
         <div class="cal-day-label">日</div><div class="cal-day-label">月</div><div class="cal-day-label">火</div><div class="cal-day-label">水</div><div class="cal-day-label">木</div><div class="cal-day-label">金</div><div class="cal-day-label">土</div>
@@ -183,73 +122,61 @@ select option { background: var(--bg3); }
       <div class="cal-grid" id="cal-body"></div>
     </div>
 
-    <!-- 記録 -->
     <div class="screen" id="screen-record">
-      <div class="page-header">
-        <h1>記録</h1>
-        <input type="date" id="record-date" style="width:auto;font-size:13px;padding:8px 12px;">
+      <div class="rec-date-bar">
+        <input type="date" id="record-date" onchange="switchRecordDate()">
       </div>
-      <div style="height:12px;"></div>
-      <div id="exercises-list"></div>
-      <div style="padding:4px 16px 20px;display:flex;gap:10px;">
-        <button class="btn btn-ghost" onclick="openAddExercise()" style="flex:1;justify-content:center;">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      <div id="ex-cards"></div>
+      <div class="add-ex-wrap">
+        <button class="btn btn-ghost" style="width:100%;justify-content:center;" onclick="openAddExModal()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
           種目を追加
         </button>
-        <button class="btn btn-accent" onclick="saveWorkout()">保存</button>
       </div>
     </div>
 
-    <!-- 履歴 -->
     <div class="screen" id="screen-history">
       <div class="page-header"><h1>履歴</h1></div>
       <div style="height:12px;"></div>
       <div id="history-list"></div>
     </div>
 
-    <!-- 統計 -->
     <div class="screen" id="screen-stats">
       <div class="page-header"><h1>統計</h1></div>
       <div id="stats-content"></div>
     </div>
-
   </div>
 
   <nav class="nav">
     <button class="nav-btn active" id="nav-home" onclick="showScreen('home')">
-      <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-      カレンダー
+      <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>カレンダー
     </button>
     <button class="nav-btn" id="nav-record" onclick="showScreen('record')">
-      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
-      記録
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>記録
     </button>
     <button class="nav-btn" id="nav-history" onclick="showScreen('history')">
-      <svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
-      履歴
+      <svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>履歴
     </button>
     <button class="nav-btn" id="nav-stats" onclick="showScreen('stats')">
-      <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-      統計
+      <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>統計
     </button>
   </nav>
 </div>
 
-<!-- 種目追加モーダル -->
-<div class="modal-overlay" id="modal-add">
+<div class="modal-overlay" id="modal-add-ex">
   <div class="modal">
     <div class="modal-handle"></div>
     <div class="modal-title">種目を追加</div>
     <div class="modal-body">
-      <div class="form-group">
+      <div style="margin-bottom:14px;">
         <label class="form-label">種目名</label>
-        <input type="text" id="ex-name" placeholder="例: ベンチプレス" list="ex-suggestions" autocomplete="off">
+        <input type="text" id="new-ex-name" placeholder="例: ベンチプレス" list="ex-suggestions" autocomplete="off">
         <datalist id="ex-suggestions"></datalist>
       </div>
-      <div id="prev-box"></div>
-      <div class="form-group">
+      <div id="new-ex-prev"></div>
+      <div>
         <label class="form-label">部位タグ</label>
-        <select id="ex-tag">
+        <select id="new-ex-tag">
           <option value="chest">胸 (Chest)</option>
           <option value="back">背中 (Back)</option>
           <option value="legs">脚 (Legs)</option>
@@ -260,30 +187,13 @@ select option { background: var(--bg3); }
         </select>
       </div>
     </div>
-    <div class="set-header-row" style="margin-top:4px;">
-      <div></div>
-      <div class="set-col-label" style="text-align:center;">重量 kg</div>
-      <div class="set-col-label" style="text-align:center;">回数</div>
-      <div class="set-col-label" style="text-align:center;color:var(--blue);">推定1RM</div>
-      <div></div>
-    </div>
-    <div id="sets-container"></div>
-    <div style="padding:0 20px;margin-bottom:14px;">
-      <button class="btn btn-ghost" onclick="addSet()" style="width:100%;justify-content:center;font-size:13px;">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        セット追加
-      </button>
-    </div>
-    <div class="summary-bar vol"><span class="summary-label">総ボリューム</span><span class="summary-val mono" id="sum-vol">0 kg</span></div>
-    <div class="summary-bar rm"><span class="summary-label" style="color:var(--blue);">最大推定1RM</span><span class="summary-val" id="sum-rm">—</span></div>
     <div class="modal-footer">
-      <button class="btn btn-ghost" onclick="closeModal('modal-add')" style="flex:1;justify-content:center;">キャンセル</button>
-      <button class="btn btn-accent" onclick="confirmAdd()" style="flex:2;justify-content:center;">追加</button>
+      <button class="btn btn-ghost" onclick="closeModal('modal-add-ex')" style="flex:1;justify-content:center;">キャンセル</button>
+      <button class="btn btn-accent" onclick="confirmAddEx()" style="flex:2;justify-content:center;">追加</button>
     </div>
   </div>
 </div>
 
-<!-- 日別詳細モーダル -->
 <div class="modal-overlay" id="modal-day">
   <div class="modal">
     <div class="modal-handle"></div>
@@ -291,6 +201,7 @@ select option { background: var(--bg3); }
     <div class="modal-body" id="day-content"></div>
     <div class="modal-footer">
       <button class="btn btn-ghost" onclick="closeModal('modal-day')" style="flex:1;justify-content:center;">閉じる</button>
+      <button class="btn btn-accent" id="day-edit-btn" style="flex:1;justify-content:center;" onclick="goEditDay()">編集</button>
     </div>
   </div>
 </div>
@@ -298,344 +209,357 @@ select option { background: var(--bg3); }
 <script>
 const TAGS = {chest:'胸',back:'背中',legs:'脚',shoulders:'肩',arms:'腕',core:'体幹',cardio:'有酸素'};
 let workouts = [];
-let currentExercises = [];
-let calYear, calMonth;
-
-function calc1RM(w, r) {
-  w = parseFloat(w) || 0; r = parseInt(r) || 0;
-  if (w <= 0 || r <= 0 || r >= 37) return null;
-  if (r === 1) return w;
-  return Math.round(w * 36 / (37 - r) * 10) / 10;
-}
-function best1RM(sets) {
-  const v = sets.map(s => calc1RM(s.weight, s.reps)).filter(Boolean);
-  return v.length ? Math.max(...v) : null;
-}
+let calY, calM;
+let dayModalDate = null;
 
 function loadData() {
-  try { const d = localStorage.getItem('wt_workouts'); if (d) workouts = JSON.parse(d); } catch(e) { workouts = []; }
+  try { const d = localStorage.getItem('wt_workouts'); if(d) workouts = JSON.parse(d); } catch(e) { workouts=[]; }
 }
-function saveData() {
+function persist() {
   try { localStorage.setItem('wt_workouts', JSON.stringify(workouts)); } catch(e) {}
 }
+function getOrCreate(date) {
+  let w = workouts.find(w => w.date === date);
+  if (!w) { w = {date, exercises:[]}; workouts.push(w); workouts.sort((a,b)=>a.date.localeCompare(b.date)); }
+  return w;
+}
+function getWorkout(date) { return workouts.find(w => w.date === date) || null; }
+function calc1RM(w, r) {
+  w = parseFloat(w)||0; r = parseInt(r)||0;
+  if (w<=0||r<=0||r>=37) return null;
+  if (r===1) return w;
+  return Math.round(w*36/(37-r)*10)/10;
+}
+function best1RM(sets) {
+  const v = sets.map(s=>calc1RM(s.weight,s.reps)).filter(Boolean);
+  return v.length ? Math.max(...v) : null;
+}
+function todayStr() { return new Date().toISOString().slice(0,10); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
 
 function showScreen(name) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById('screen-'+name).classList.add('active');
   document.getElementById('nav-'+name).classList.add('active');
-  if (name === 'home') renderCalendar();
-  if (name === 'history') renderHistory();
-  if (name === 'stats') renderStats();
-  if (name === 'record') initRecord();
+  if (name==='home') renderCalendar();
+  if (name==='history') renderHistory();
+  if (name==='stats') renderStats();
+  if (name==='record') renderRecord();
 }
 
-function initRecord() {
-  if (!document.getElementById('record-date').value)
-    document.getElementById('record-date').value = today();
-  renderExList();
+function renderRecord() {
+  const dateEl = document.getElementById('record-date');
+  if (!dateEl.value) dateEl.value = todayStr();
+  renderExCards(dateEl.value);
+}
+function switchRecordDate() {
+  renderExCards(document.getElementById('record-date').value);
 }
 
-function today() { return new Date().toISOString().slice(0,10); }
-
-function renderExList() {
-  const el = document.getElementById('exercises-list');
-  if (!currentExercises.length) {
-    el.innerHTML = '<div class="empty"><div class="empty-icon">🏋️</div><div style="font-size:14px;">種目を追加してください</div></div>';
+function renderExCards(date) {
+  const w = getWorkout(date);
+  const exList = w ? w.exercises : [];
+  const container = document.getElementById('ex-cards');
+  if (!exList.length) {
+    container.innerHTML = '<div class="empty" style="padding:40px 24px;"><div style="font-size:32px;margin-bottom:8px;opacity:0.3;">🏋️</div><div style="font-size:14px;">種目を追加してください</div></div>';
     return;
   }
-  el.innerHTML = currentExercises.map((ex, i) => {
-    const vol = ex.sets.reduce((s,st) => s+(parseFloat(st.weight)||0)*(parseInt(st.reps)||0), 0);
-    const rm = best1RM(ex.sets);
-    return `<div class="card">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
-          <span style="font-size:15px;font-weight:500;">${ex.name}</span>
-          <span class="tag tag-${ex.tag}">${TAGS[ex.tag]}</span>
-        </div>
-        <button class="btn-danger" onclick="removeEx(${i})">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>
-        </button>
-      </div>
-      <div class="set-chips">
-        ${ex.sets.map((st,si) => {
-          const r1 = calc1RM(st.weight, st.reps);
-          return `<span class="set-chip">${si+1}. ${st.weight}kg×${st.reps}${r1?`<span class="rm-inline"> →${r1}</span>`:''}`;
-        }).join('')}
-      </div>
-      <div style="display:flex;gap:14px;margin-top:10px;font-size:12px;color:var(--text2);">
-        <span>Vol <span class="mono" style="color:var(--text);">${vol.toLocaleString()} kg</span></span>
-        ${rm ? `<span>推定1RM <span class="mono" style="color:var(--blue);">${rm} kg</span></span>` : ''}
-      </div>
-    </div>`;
-  }).join('');
+  container.innerHTML = exList.map((ex, ei) => buildExCard(date, ei, ex)).join('');
 }
 
-function removeEx(i) { currentExercises.splice(i, 1); renderExList(); }
-
-function openAddExercise() {
-  document.getElementById('ex-name').value = '';
-  document.getElementById('ex-tag').value = 'chest';
-  document.getElementById('prev-box').innerHTML = '';
-  document.getElementById('sets-container').innerHTML = '';
-  addSet(); addSet(); addSet();
-  // suggestions
-  const names = [...new Set(workouts.flatMap(w => w.exercises.map(e => e.name)))];
-  document.getElementById('ex-suggestions').innerHTML = names.map(n => `<option value="${n}">`).join('');
-  updateCalc();
-  document.getElementById('modal-add').classList.add('open');
+function buildExCard(date, ei, ex) {
+  const rm = best1RM(ex.sets);
+  const vol = ex.sets.reduce((s,st)=>s+(parseFloat(st.weight)||0)*(parseInt(st.reps)||0),0);
+  let setsHtml = '';
+  if (ex.sets.length) {
+    setsHtml += `<div class="set-col-header">
+      <div></div>
+      <div class="set-col-label">kg</div>
+      <div class="set-col-label">reps</div>
+      <div class="set-col-label" style="color:var(--blue);">1RM</div>
+      <div></div>
+    </div>`;
+    setsHtml += '<div class="set-list">' + ex.sets.map((st,si) => {
+      const r1 = calc1RM(st.weight, st.reps);
+      return `<div class="set-item">
+        <span class="set-n">${si+1}</span>
+        <span class="set-val">${st.weight}</span>
+        <span class="set-val">${st.reps}</span>
+        <span class="set-rm-val">${r1?r1+'kg':'—'}</span>
+        <button class="set-del-btn" onclick="deleteSet('${date}',${ei},${si})">
+          <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>`;
+    }).join('') + '</div>';
+  }
+  const nextSet = ex.sets.length + 1;
+  const prevSet = ex.sets.length ? ex.sets[ex.sets.length-1] : null;
+  const prevW = prevSet ? prevSet.weight : '';
+  const prevR = prevSet ? prevSet.reps : '';
+  setsHtml += `<div class="set-input-row" id="input-row-${date}-${ei}">
+    <span class="set-n" style="color:var(--accent);">${nextSet}</span>
+    <input class="set-mini-input" type="number" id="wi-${date}-${ei}" placeholder="kg" min="0" step="0.5" inputmode="decimal" value="${prevW}" onfocus="this.select()">
+    <input class="set-mini-input" type="number" id="ri-${date}-${ei}" placeholder="回" min="0" step="1" inputmode="numeric" value="${prevR}" onfocus="this.select()" onkeydown="if(event.key==='Enter')confirmSet('${date}',${ei})">
+    <span class="set-rm-val" id="live-rm-${date}-${ei}">—</span>
+    <button class="set-confirm-btn" onclick="confirmSet('${date}',${ei})">
+      <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+    </button>
+  </div>`;
+  setsHtml += `<div class="ex-vol">
+    <span>Vol <b style="color:var(--text);font-variant-numeric:tabular-nums;">${vol.toLocaleString()} kg</b></span>
+    ${rm?`<span>推定1RM <b style="color:var(--blue);font-variant-numeric:tabular-nums;">${rm} kg</b></span>`:''}
+  </div>`;
+  return `<div class="ex-card" id="ex-card-${date}-${ei}">
+    <div class="ex-card-header">
+      <div class="ex-card-title">
+        <span style="font-size:15px;font-weight:500;">${ex.name}</span>
+        <span class="tag tag-${ex.tag}">${TAGS[ex.tag]}</span>
+      </div>
+      <button class="btn-icon" style="width:30px;height:30px;" onclick="deleteExercise('${date}',${ei})">
+        <svg viewBox="0 0 24 24" style="width:14px;height:14px;"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg>
+      </button>
+    </div>
+    <div class="ex-card-body">${setsHtml}</div>
+  </div>`;
 }
 
 document.addEventListener('input', e => {
-  if (e.target.id === 'ex-name') checkPrev(e.target.value);
-  if (e.target.classList.contains('set-input')) updateCalc();
+  const id = e.target.id;
+  const m = id.match(/^(wi|ri)-(.+)-(\d+)$/);
+  if (!m) return;
+  const [,, date, eiStr] = m;
+  const ei = parseInt(eiStr);
+  const w = document.getElementById(`wi-${date}-${ei}`)?.value;
+  const r = document.getElementById(`ri-${date}-${ei}`)?.value;
+  const rm = calc1RM(w, r);
+  const el = document.getElementById(`live-rm-${date}-${ei}`);
+  if (el) el.textContent = rm ? rm+'kg' : '—';
+
+  if (e.target.id === 'new-ex-name') {
+    const name = e.target.value.trim();
+    if (!name) { document.getElementById('new-ex-prev').innerHTML=''; return; }
+    const prev = [...workouts].reverse().find(w=>w.exercises.some(ex=>ex.name===name));
+    if (!prev) { document.getElementById('new-ex-prev').innerHTML=''; return; }
+    const ex = prev.exercises.find(e=>e.name===name);
+    const rm2 = best1RM(ex.sets);
+    const maxW = Math.max(...ex.sets.map(s=>parseFloat(s.weight)||0));
+    const dt = new Date(prev.date+'T00:00:00').toLocaleDateString('ja-JP',{month:'numeric',day:'numeric'});
+    document.getElementById('new-ex-prev').innerHTML =
+      `<div class="prev-box" style="margin-top:10px;">前回 ${dt} — 最大 ${maxW}kg${rm2?` / 推定1RM ${rm2}kg`:''}</div>`;
+    const tag = workouts.flatMap(w=>w.exercises).find(ex=>ex.name===name);
+    if (tag) document.getElementById('new-ex-tag').value = tag.tag;
+  }
 });
 
-function checkPrev(name) {
-  if (!name.trim()) { document.getElementById('prev-box').innerHTML = ''; return; }
-  const w = [...workouts].reverse().find(w => w.exercises.some(e => e.name === name));
-  if (!w) { document.getElementById('prev-box').innerHTML = ''; return; }
-  const ex = w.exercises.find(e => e.name === name);
-  const rm = best1RM(ex.sets);
-  const maxW = Math.max(...ex.sets.map(s => parseFloat(s.weight)||0));
-  const dt = new Date(w.date+'T00:00:00').toLocaleDateString('ja-JP',{month:'numeric',day:'numeric'});
-  document.getElementById('prev-box').innerHTML =
-    `<div class="prev-box" style="margin-bottom:14px;">前回 ${dt} — 最大 ${maxW}kg${rm?` / 推定1RM ${rm}kg`:''}</div>`;
-  const tag = workouts.flatMap(w=>w.exercises).find(e=>e.name===name);
-  if (tag) document.getElementById('ex-tag').value = tag.tag;
+function confirmSet(date, ei) {
+  const w = document.getElementById(`wi-${date}-${ei}`)?.value;
+  const r = document.getElementById(`ri-${date}-${ei}`)?.value;
+  if (!w && !r) return;
+  const workout = getOrCreate(date);
+  workout.exercises[ei].sets.push({weight: w||'0', reps: r||'0'});
+  persist();
+  renderExCards(date);
+  setTimeout(() => {
+    const nextW = document.getElementById(`wi-${date}-${ei}`);
+    if (nextW) nextW.focus();
+  }, 50);
 }
 
-function addSet() {
-  const c = document.getElementById('sets-container');
-  const n = c.children.length + 1;
-  const row = document.createElement('div');
-  row.className = 'set-row';
-  row.innerHTML = `<span class="set-num">${n}</span>
-    <input class="set-input" type="number" placeholder="0" min="0" step="0.5" inputmode="decimal">
-    <input class="set-input" type="number" placeholder="0" min="0" step="1" inputmode="numeric">
-    <span class="set-rm">—</span>
-    <button class="set-del" onclick="this.closest('.set-row').remove();renumber();updateCalc();">
-      <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-    </button>`;
-  c.appendChild(row);
-}
-
-function renumber() {
-  document.querySelectorAll('#sets-container .set-num').forEach((el,i) => el.textContent = i+1);
-}
-
-function updateCalc() {
-  let vol = 0, maxRm = null;
-  document.querySelectorAll('#sets-container .set-row').forEach(row => {
-    const [wi, ri] = row.querySelectorAll('.set-input');
-    const w = parseFloat(wi?.value)||0, r = parseInt(ri?.value)||0;
-    vol += w * r;
-    const rm = calc1RM(w, r);
-    const el = row.querySelector('.set-rm');
-    if (el) el.textContent = rm ? rm + ' kg' : '—';
-    if (rm && (maxRm === null || rm > maxRm)) maxRm = rm;
-  });
-  document.getElementById('sum-vol').textContent = vol.toLocaleString() + ' kg';
-  document.getElementById('sum-rm').textContent = maxRm !== null ? maxRm + ' kg' : '—';
-}
-
-function confirmAdd() {
-  const name = document.getElementById('ex-name').value.trim();
-  if (!name) { alert('種目名を入力してください'); return; }
-  const tag = document.getElementById('ex-tag').value;
-  const sets = [];
-  document.querySelectorAll('#sets-container .set-row').forEach(row => {
-    const [wi, ri] = row.querySelectorAll('.set-input');
-    if (wi?.value || ri?.value) sets.push({weight: wi?.value||'0', reps: ri?.value||'0'});
-  });
-  if (!sets.length) { alert('セットを入力してください'); return; }
-  currentExercises.push({name, tag, sets});
-  closeModal('modal-add');
-  renderExList();
-}
-
-async function saveWorkout() {
-  if (!currentExercises.length) { alert('種目を追加してください'); return; }
-  const date = document.getElementById('record-date').value;
-  const idx = workouts.findIndex(w => w.date === date);
-  if (idx >= 0) {
-    if (!confirm('この日の記録を上書きしますか？')) return;
-    workouts[idx].exercises = JSON.parse(JSON.stringify(currentExercises));
-  } else {
-    workouts.push({date, exercises: JSON.parse(JSON.stringify(currentExercises))});
+function deleteSet(date, ei, si) {
+  const w = getWorkout(date);
+  if (!w) return;
+  w.exercises[ei].sets.splice(si, 1);
+  if (!w.exercises[ei].sets.length) {
+    if (!confirm('セットが0になります。種目ごと削除しますか？')) { renderExCards(date); return; }
+    w.exercises.splice(ei, 1);
+    if (!w.exercises.length) workouts = workouts.filter(wk => wk.date !== date);
   }
-  workouts.sort((a,b) => a.date.localeCompare(b.date));
-  saveData();
-  currentExercises = [];
-  alert('保存しました！');
-  showScreen('home');
+  persist();
+  renderExCards(date);
 }
 
-// Calendar
-let calY, calM;
+function deleteExercise(date, ei) {
+  if (!confirm('この種目を削除しますか？')) return;
+  const w = getWorkout(date);
+  if (!w) return;
+  w.exercises.splice(ei, 1);
+  if (!w.exercises.length) workouts = workouts.filter(wk => wk.date !== date);
+  persist();
+  renderExCards(date);
+}
+
+function openAddExModal() {
+  document.getElementById('new-ex-name').value = '';
+  document.getElementById('new-ex-tag').value = 'chest';
+  document.getElementById('new-ex-prev').innerHTML = '';
+  const names = [...new Set(workouts.flatMap(w=>w.exercises.map(e=>e.name)))];
+  document.getElementById('ex-suggestions').innerHTML = names.map(n=>`<option value="${n}">`).join('');
+  document.getElementById('modal-add-ex').classList.add('open');
+}
+
+function confirmAddEx() {
+  const name = document.getElementById('new-ex-name').value.trim();
+  if (!name) { alert('種目名を入力してください'); return; }
+  const tag = document.getElementById('new-ex-tag').value;
+  const date = document.getElementById('record-date').value;
+  const workout = getOrCreate(date);
+  if (workout.exercises.some(e=>e.name===name)) { alert('この種目はすでに追加されています'); return; }
+  workout.exercises.push({name, tag, sets:[]});
+  persist();
+  closeModal('modal-add-ex');
+  renderExCards(date);
+}
+
 function renderCalendar() {
   const now = new Date();
-  if (calY === undefined) { calY = now.getFullYear(); calM = now.getMonth(); }
+  if (calY===undefined) { calY=now.getFullYear(); calM=now.getMonth(); }
   document.getElementById('cal-title').textContent = `${calY} / ${String(calM+1).padStart(2,'0')}`;
-  const first = new Date(calY, calM, 1);
-  const last = new Date(calY, calM+1, 0);
-  const todayStr = now.toISOString().slice(0,10);
-  const wDates = new Set(workouts.map(w => w.date));
-  let html = '';
-  for (let i = 0; i < first.getDay(); i++) {
-    const d = new Date(calY, calM, -first.getDay()+i+1);
-    html += `<div class="cal-day other-month">${d.getDate()}</div>`;
+  const first = new Date(calY,calM,1);
+  const last = new Date(calY,calM+1,0);
+  const ts = now.toISOString().slice(0,10);
+  const wDates = new Set(workouts.map(w=>w.date));
+  let html='';
+  for(let i=0;i<first.getDay();i++){
+    const d=new Date(calY,calM,-first.getDay()+i+1);
+    html+=`<div class="cal-day other-month">${d.getDate()}</div>`;
   }
-  for (let d = 1; d <= last.getDate(); d++) {
-    const ds = `${calY}-${String(calM+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-    const cls = [wDates.has(ds)?'has-workout':'', ds===todayStr?'today':''].filter(Boolean).join(' ');
-    html += `<div class="cal-day ${cls}" onclick="showDay('${ds}')">${d}</div>`;
+  for(let d=1;d<=last.getDate();d++){
+    const ds=`${calY}-${String(calM+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const cls=[wDates.has(ds)?'has-workout':'',ds===ts?'today':''].filter(Boolean).join(' ');
+    html+=`<div class="cal-day ${cls}" onclick="openDayModal('${ds}')">${d}</div>`;
   }
-  document.getElementById('cal-body').innerHTML = html;
+  document.getElementById('cal-body').innerHTML=html;
 }
-
-function changeMonth(d) {
-  calM += d;
-  if (calM > 11) { calM = 0; calY++; }
-  if (calM < 0) { calM = 11; calY--; }
+function changeMonth(d){
+  calM+=d;
+  if(calM>11){calM=0;calY++;}
+  if(calM<0){calM=11;calY--;}
   renderCalendar();
 }
 
-function showDay(dateStr) {
-  const w = workouts.find(w => w.date === dateStr);
+function openDayModal(dateStr) {
+  dayModalDate = dateStr;
+  const w = getWorkout(dateStr);
   const dt = new Date(dateStr+'T00:00:00').toLocaleDateString('ja-JP',{year:'numeric',month:'long',day:'numeric',weekday:'short'});
   document.getElementById('day-title').textContent = dt;
+  document.getElementById('day-edit-btn').style.display = w ? '' : 'none';
   if (!w) {
     document.getElementById('day-content').innerHTML = '<p style="color:var(--text3);font-size:14px;padding-bottom:8px;">この日の記録はありません</p>';
   } else {
-    document.getElementById('day-content').innerHTML = w.exercises.map((ex, i) => {
-      const vol = ex.sets.reduce((s,st) => s+(parseFloat(st.weight)||0)*(parseInt(st.reps)||0), 0);
+    document.getElementById('day-content').innerHTML = w.exercises.map((ex,i) => {
+      const vol = ex.sets.reduce((s,st)=>s+(parseFloat(st.weight)||0)*(parseInt(st.reps)||0),0);
       const rm = best1RM(ex.sets);
-      return `<div style="padding:14px 0;border-bottom:0.5px solid var(--border);">
-        <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
-          <span style="font-size:12px;color:var(--text3);font-family:'DM Mono',monospace;">${String(i+1).padStart(2,'0')}</span>
+      return `<div style="padding:12px 0;border-bottom:0.5px solid var(--border);">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+          <span style="font-size:12px;color:var(--text3);">${String(i+1).padStart(2,'0')}</span>
           <span style="font-size:15px;font-weight:500;">${ex.name}</span>
           <span class="tag tag-${ex.tag}">${TAGS[ex.tag]}</span>
         </div>
-        <div class="set-chips">
-          ${ex.sets.map((st,si) => {
-            const r1 = calc1RM(st.weight, st.reps);
-            return `<span class="set-chip">${si+1}. ${st.weight}kg×${st.reps}${r1?`<span class="rm-inline"> →${r1}</span>`:''}`;
+        <div style="display:flex;flex-wrap:wrap;gap:5px;">
+          ${ex.sets.map((st,si)=>{
+            const r1=calc1RM(st.weight,st.reps);
+            return `<span style="font-size:12px;background:var(--bg3);padding:4px 8px;border-radius:99px;color:var(--text2);">${si+1}. ${st.weight}kg×${st.reps}${r1?`<span style="color:var(--blue);"> →${r1}</span>`:''}`;
           }).join('')}
         </div>
-        <div style="display:flex;gap:14px;margin-top:10px;font-size:12px;color:var(--text2);">
-          <span>Vol <span class="mono" style="color:var(--text);">${vol.toLocaleString()} kg</span></span>
-          ${rm?`<span>推定1RM <span class="mono" style="color:var(--blue);">${rm} kg</span></span>`:''}
+        <div style="display:flex;gap:12px;margin-top:8px;font-size:12px;color:var(--text3);">
+          <span>Vol <b style="color:var(--text2);">${vol.toLocaleString()} kg</b></span>
+          ${rm?`<span>推定1RM <b style="color:var(--blue);">${rm} kg</b></span>`:''}
         </div>
       </div>`;
-    }).join('') + `<div style="padding:12px 0 4px;display:flex;gap:10px;">
-      <button class="btn btn-ghost" style="font-size:13px;" onclick="loadWorkoutForEdit('${w.date}')">この日を編集</button>
-    </div>`;
+    }).join('');
   }
   document.getElementById('modal-day').classList.add('open');
 }
 
-function loadWorkoutForEdit(dateStr) {
-  const w = workouts.find(w => w.date === dateStr);
-  if (!w) return;
-  currentExercises = JSON.parse(JSON.stringify(w.exercises));
-  document.getElementById('record-date').value = dateStr;
+function goEditDay() {
+  if (!dayModalDate) return;
   closeModal('modal-day');
+  document.getElementById('record-date').value = dayModalDate;
   showScreen('record');
 }
 
 function renderHistory() {
   const el = document.getElementById('history-list');
-  if (!workouts.length) { el.innerHTML = '<div class="empty"><div class="empty-icon">📋</div><div style="font-size:14px;">記録がありません</div></div>'; return; }
-  el.innerHTML = workouts.slice().reverse().map(w => {
+  if (!workouts.length) { el.innerHTML='<div class="empty"><div style="font-size:32px;margin-bottom:8px;opacity:0.3;">📋</div><div style="font-size:14px;">記録がありません</div></div>'; return; }
+  el.innerHTML = workouts.slice().reverse().map(w=>{
     const dt = new Date(w.date+'T00:00:00').toLocaleDateString('ja-JP',{month:'long',day:'numeric',weekday:'short'});
-    const vol = w.exercises.reduce((s,ex) => s+ex.sets.reduce((ss,st) => ss+(parseFloat(st.weight)||0)*(parseInt(st.reps)||0), 0), 0);
-    const tags = [...new Set(w.exercises.map(e => e.tag))];
-    return `<div class="card card-tap" onclick="showDay('${w.date}')">
+    const vol = w.exercises.reduce((s,ex)=>s+ex.sets.reduce((ss,st)=>ss+(parseFloat(st.weight)||0)*(parseInt(st.reps)||0),0),0);
+    const tags = [...new Set(w.exercises.map(e=>e.tag))];
+    return `<div class="card card-tap" onclick="openDayModal('${w.date}')">
       <div style="display:flex;justify-content:space-between;margin-bottom:10px;">
         <div>
           <div style="font-size:15px;font-weight:500;">${dt}</div>
-          <div style="font-size:12px;color:var(--text2);margin-top:3px;">${w.exercises.length}種目 &nbsp;·&nbsp; <span class="mono">${vol.toLocaleString()} kg</span></div>
+          <div style="font-size:12px;color:var(--text2);margin-top:3px;">${w.exercises.length}種目 · ${vol.toLocaleString()} kg</div>
         </div>
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text3)" stroke-width="1.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
       </div>
-      <div style="display:flex;flex-wrap:wrap;gap:5px;">${tags.map(t => `<span class="tag tag-${t}">${TAGS[t]}</span>`).join('')}</div>
+      <div style="display:flex;flex-wrap:wrap;gap:5px;">${tags.map(t=>`<span class="tag tag-${t}">${TAGS[t]}</span>`).join('')}</div>
     </div>`;
   }).join('');
 }
 
 function renderStats() {
   const el = document.getElementById('stats-content');
-  if (!workouts.length) { el.innerHTML = '<div class="empty"><div class="empty-icon">📊</div><div style="font-size:14px;">記録がありません</div></div>'; return; }
-
+  if (!workouts.length) { el.innerHTML='<div class="empty"><div style="font-size:32px;margin-bottom:8px;opacity:0.3;">📊</div><div style="font-size:14px;">記録がありません</div></div>'; return; }
   const prMap = {};
-  workouts.forEach(w => {
-    w.exercises.forEach(ex => {
+  workouts.forEach(w=>{
+    w.exercises.forEach(ex=>{
+      if (!ex.sets.length) return;
       const rm = best1RM(ex.sets);
-      const maxW = Math.max(...ex.sets.map(s => parseFloat(s.weight)||0));
-      if (!prMap[ex.name]) prMap[ex.name] = {rm: null, maxW: 0, date: w.date, tag: ex.tag};
-      if (rm !== null && (prMap[ex.name].rm === null || rm > prMap[ex.name].rm)) {
-        prMap[ex.name] = {...prMap[ex.name], rm, date: w.date};
-      }
-      if (maxW > prMap[ex.name].maxW) prMap[ex.name].maxW = maxW;
+      const maxW = Math.max(...ex.sets.map(s=>parseFloat(s.weight)||0));
+      if (!prMap[ex.name]) prMap[ex.name]={rm:null,maxW:0,date:w.date,tag:ex.tag};
+      if (rm!==null&&(prMap[ex.name].rm===null||rm>prMap[ex.name].rm)) { prMap[ex.name].rm=rm; prMap[ex.name].date=w.date; }
+      if (maxW>prMap[ex.name].maxW) prMap[ex.name].maxW=maxW;
     });
   });
-
-  const totalVol = workouts.reduce((s,w) => s+w.exercises.reduce((ss,ex) => ss+ex.sets.reduce((sss,st) => sss+(parseFloat(st.weight)||0)*(parseInt(st.reps)||0),0),0), 0);
+  const totalVol = workouts.reduce((s,w)=>s+w.exercises.reduce((ss,ex)=>ss+ex.sets.reduce((sss,st)=>sss+(parseFloat(st.weight)||0)*(parseInt(st.reps)||0),0),0),0);
   const tagVol = {};
-  workouts.forEach(w => w.exercises.forEach(ex => { tagVol[ex.tag] = (tagVol[ex.tag]||0) + ex.sets.reduce((s,st)=>s+(parseFloat(st.weight)||0)*(parseInt(st.reps)||0),0); }));
-  const maxV = Math.max(...Object.values(tagVol), 1);
-
+  workouts.forEach(w=>w.exercises.forEach(ex=>{ tagVol[ex.tag]=(tagVol[ex.tag]||0)+ex.sets.reduce((s,st)=>s+(parseFloat(st.weight)||0)*(parseInt(st.reps)||0),0); }));
+  const maxV = Math.max(...Object.values(tagVol),1);
   let html = `<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;padding:16px 16px 4px;">
     <div style="background:var(--bg2);border:0.5px solid var(--border);border-radius:var(--radius);padding:16px;text-align:center;">
       <div style="font-size:10px;color:var(--text3);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:8px;">ワークアウト</div>
-      <div class="mono" style="font-size:28px;font-weight:500;">${workouts.length}</div>
+      <div style="font-size:28px;font-weight:500;">${workouts.length}</div>
     </div>
     <div style="background:var(--bg2);border:0.5px solid var(--border);border-radius:var(--radius);padding:16px;text-align:center;">
       <div style="font-size:10px;color:var(--text3);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:8px;">累計 Vol</div>
-      <div class="mono" style="font-size:24px;font-weight:500;">${(totalVol/1000).toFixed(1)}<span style="font-size:14px;"> t</span></div>
+      <div style="font-size:24px;font-weight:500;">${(totalVol/1000).toFixed(1)}<span style="font-size:14px;"> t</span></div>
     </div>
   </div>`;
-
-  html += `<div style="padding:20px 16px 8px;font-size:10px;color:var(--text3);letter-spacing:0.08em;text-transform:uppercase;">推定1RM 自己記録 (Brzycki)</div>`;
-  html += `<div class="card">`;
-  Object.entries(prMap).sort((a,b) => (b[1].rm||0)-(a[1].rm||0)).forEach(([name, pr]) => {
-    const dt = new Date(pr.date+'T00:00:00').toLocaleDateString('ja-JP',{month:'numeric',day:'numeric'});
-    html += `<div class="stat-metric">
-      <div>
-        <div style="font-size:14px;margin-bottom:4px;">${name}</div>
-        <div style="display:flex;gap:6px;align-items:center;">
-          <span class="tag tag-${pr.tag}">${TAGS[pr.tag]}</span>
-          <span style="font-size:11px;color:var(--text3);">${dt}</span>
+  if (Object.keys(prMap).length) {
+    html += `<div style="padding:20px 16px 8px;font-size:10px;color:var(--text3);letter-spacing:0.08em;text-transform:uppercase;">推定1RM 自己記録 (Brzycki)</div><div class="card">`;
+    Object.entries(prMap).sort((a,b)=>(b[1].rm||0)-(a[1].rm||0)).forEach(([name,pr])=>{
+      const dt = new Date(pr.date+'T00:00:00').toLocaleDateString('ja-JP',{month:'numeric',day:'numeric'});
+      html += `<div class="stat-metric">
+        <div>
+          <div style="font-size:14px;margin-bottom:4px;">${name}</div>
+          <div style="display:flex;gap:6px;align-items:center;"><span class="tag tag-${pr.tag}">${TAGS[pr.tag]}</span><span style="font-size:11px;color:var(--text3);">${dt}</span></div>
         </div>
-      </div>
-      <div style="text-align:right;">
-        ${pr.rm !== null ? `<div class="pr-val">${pr.rm} kg</div>` : ''}
-        <div style="font-size:11px;color:var(--text3);">実測 ${pr.maxW} kg</div>
-      </div>
-    </div>`;
-  });
-  html += `</div>`;
-
-  html += `<div style="padding:20px 16px 8px;font-size:10px;color:var(--text3);letter-spacing:0.08em;text-transform:uppercase;">部位別ボリューム</div>`;
-  html += `<div class="card" style="margin-bottom:24px;">`;
-  Object.entries(tagVol).sort((a,b)=>b[1]-a[1]).forEach(([tag, vol]) => {
-    const pct = Math.round(vol/maxV*100);
-    html += `<div style="margin-bottom:12px;">
-      <div style="display:flex;justify-content:space-between;margin-bottom:5px;">
-        <span class="tag tag-${tag}">${TAGS[tag]}</span>
-        <span class="mono" style="font-size:12px;color:var(--text2);">${vol.toLocaleString()} kg</span>
-      </div>
-      <div style="height:4px;background:var(--bg3);border-radius:2px;">
-        <div style="height:4px;width:${pct}%;background:var(--accent);border-radius:2px;transition:width 0.4s;"></div>
-      </div>
-    </div>`;
-  });
-  html += `</div>`;
-
-  // Export/Import
-  html += `<div style="padding:0 16px 8px;font-size:10px;color:var(--text3);letter-spacing:0.08em;text-transform:uppercase;">データ管理</div>`;
-  html += `<div class="data-actions">
+        <div style="text-align:right;">
+          ${pr.rm!==null?`<div class="pr-val">${pr.rm} kg</div>`:''}
+          <div style="font-size:11px;color:var(--text3);">実測 ${pr.maxW} kg</div>
+        </div>
+      </div>`;
+    });
+    html += `</div>`;
+  }
+  if (Object.keys(tagVol).length) {
+    html += `<div style="padding:20px 16px 8px;font-size:10px;color:var(--text3);letter-spacing:0.08em;text-transform:uppercase;">部位別ボリューム</div><div class="card">`;
+    Object.entries(tagVol).sort((a,b)=>b[1]-a[1]).forEach(([tag,vol])=>{
+      const pct = Math.round(vol/maxV*100);
+      html += `<div style="margin-bottom:12px;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:5px;">
+          <span class="tag tag-${tag}">${TAGS[tag]}</span>
+          <span style="font-size:12px;color:var(--text2);">${vol.toLocaleString()} kg</span>
+        </div>
+        <div style="height:4px;background:var(--bg3);border-radius:2px;"><div style="height:4px;width:${pct}%;background:var(--accent);border-radius:2px;"></div></div>
+      </div>`;
+    });
+    html += `</div>`;
+  }
+  html += `<div style="padding:20px 16px 8px;font-size:10px;color:var(--text3);letter-spacing:0.08em;text-transform:uppercase;">データ管理</div>
+  <div class="data-actions">
     <button class="btn btn-ghost" onclick="exportData()" style="flex:1;justify-content:center;font-size:13px;">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
       エクスポート
@@ -646,58 +570,49 @@ function renderStats() {
     </button>
     <input type="file" id="import-file" accept=".json" style="display:none" onchange="importData(event)">
   </div><div style="height:32px;"></div>`;
-
   el.innerHTML = html;
 }
 
 function exportData() {
   const json = JSON.stringify(workouts, null, 2);
-  const blob = new Blob([json], {type: 'application/json'});
+  const blob = new Blob([json], {type:'application/json'});
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
-  a.href = url;
-  a.download = `workout-backup-${today()}.json`;
-  a.click();
+  a.href=url; a.download=`workout-backup-${todayStr()}.json`; a.click();
   URL.revokeObjectURL(url);
 }
-
 function importData(e) {
-  const file = e.target.files[0];
-  if (!file) return;
+  const file = e.target.files[0]; if(!file) return;
   const reader = new FileReader();
   reader.onload = ev => {
     try {
       const data = JSON.parse(ev.target.result);
       if (!Array.isArray(data)) throw new Error();
-      if (!confirm(`${data.length}件のワークアウトをインポートします。現在のデータに追加しますか？`)) return;
-      const existing = new Set(workouts.map(w => w.date));
-      data.forEach(w => { if (!existing.has(w.date)) workouts.push(w); });
-      workouts.sort((a,b) => a.date.localeCompare(b.date));
-      saveData();
-      alert('インポート完了しました');
+      if (!confirm(`${data.length}件をインポートします。現在のデータに追加しますか？`)) return;
+      const existing = new Set(workouts.map(w=>w.date));
+      data.forEach(w=>{ if(!existing.has(w.date)) workouts.push(w); });
+      workouts.sort((a,b)=>a.date.localeCompare(b.date));
+      persist();
+      alert('インポート完了');
       renderStats();
-    } catch { alert('ファイルの形式が正しくありません'); }
+    } catch { alert('ファイル形式が正しくありません'); }
   };
   reader.readAsText(file);
-  e.target.value = '';
+  e.target.value='';
 }
 
-function closeModal(id) { document.getElementById(id).classList.remove('open'); }
-document.querySelectorAll('.modal-overlay').forEach(m => {
-  m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); });
+document.querySelectorAll('.modal-overlay').forEach(m=>{
+  m.addEventListener('click', e=>{ if(e.target===m) m.classList.remove('open'); });
 });
 
-// Init
 loadData();
-const now = new Date();
-calY = now.getFullYear(); calM = now.getMonth();
+calY = new Date().getFullYear(); calM = new Date().getMonth();
 renderCalendar();
-document.getElementById('record-date').value = today();
-renderExList();
+document.getElementById('record-date').value = todayStr();
+renderRecord();
 
-// PWA service worker
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('sw.js').catch(() => {});
+  navigator.serviceWorker.register('sw.js').catch(()=>{});
 }
 </script>
 </body>

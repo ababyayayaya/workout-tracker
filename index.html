@@ -19,6 +19,8 @@
   --blue: #4ea8f5; --blue-dim: rgba(78,168,245,0.12);
   --red: #f5694e;
   --radius: 12px; --radius-sm: 8px;
+  --c-chest: #f5694e; --c-back: #4ea8f5; --c-legs: #4ef587;
+  --c-shoulders: #c8d830; --c-arms: #f5b44e; --c-core: #b44ef5; --c-cardio: #f54eb4;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(--text); font-family: -apple-system, 'Helvetica Neue', sans-serif; }
@@ -42,13 +44,13 @@ h1 { font-size: 22px; font-weight: 500; letter-spacing: -0.02em; }
 .card-tap { cursor: pointer; transition: background 0.15s; }
 .card-tap:active { background: var(--bg3); }
 .tag { display: inline-flex; align-items: center; font-size: 11px; font-weight: 500; padding: 3px 8px; border-radius: 99px; letter-spacing: 0.02em; }
-.tag-chest { background: rgba(245,105,78,0.15); color: #f5694e; }
-.tag-back { background: rgba(78,168,245,0.15); color: #4ea8f5; }
-.tag-legs { background: rgba(78,245,135,0.15); color: #4ef587; }
-.tag-shoulders { background: rgba(232,245,78,0.15); color: #c8d830; }
-.tag-arms { background: rgba(245,180,78,0.15); color: #f5b44e; }
-.tag-core { background: rgba(180,78,245,0.15); color: #b44ef5; }
-.tag-cardio { background: rgba(245,78,180,0.15); color: #f54eb4; }
+.tag-chest { background: rgba(245,105,78,0.15); color: var(--c-chest); }
+.tag-back { background: rgba(78,168,245,0.15); color: var(--c-back); }
+.tag-legs { background: rgba(78,245,135,0.15); color: var(--c-legs); }
+.tag-shoulders { background: rgba(232,245,78,0.15); color: var(--c-shoulders); }
+.tag-arms { background: rgba(245,180,78,0.15); color: var(--c-arms); }
+.tag-core { background: rgba(180,78,245,0.15); color: var(--c-core); }
+.tag-cardio { background: rgba(245,78,180,0.15); color: var(--c-cardio); }
 .form-label { font-size: 11px; color: var(--text2); letter-spacing: 0.06em; text-transform: uppercase; display: block; margin-bottom: 8px; }
 input[type=text], input[type=date], input[type=number], select {
   width: 100%; padding: 11px 14px; background: var(--bg3); border: 0.5px solid var(--border2); border-radius: var(--radius-sm);
@@ -58,22 +60,31 @@ input:focus, select:focus { border-color: var(--accent); }
 select option { background: var(--bg3); }
 .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 100; align-items: flex-end; }
 .modal-overlay.open { display: flex; }
-.modal { background: var(--bg2); border-radius: 20px 20px 0 0; border-top: 0.5px solid var(--border2); width: 100%; max-height: 88dvh; overflow-y: auto; padding: 0 0 calc(24px + env(safe-area-inset-bottom, 0px)); animation: slideUp 0.26s cubic-bezier(0.32,0.72,0,1); }
+.modal { background: var(--bg2); border-radius: 20px 20px 0 0; border-top: 0.5px solid var(--border2); width: 100%; max-height: 90dvh; overflow-y: auto; padding: 0 0 calc(24px + env(safe-area-inset-bottom, 0px)); animation: slideUp 0.26s cubic-bezier(0.32,0.72,0,1); }
 @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
 .modal-handle { width: 36px; height: 4px; background: var(--border2); border-radius: 2px; margin: 14px auto 18px; }
 .modal-title { font-size: 16px; font-weight: 500; padding: 0 20px 16px; }
 .modal-body { padding: 0 20px; }
 .modal-footer { display: flex; gap: 10px; padding: 16px 20px 0; }
+::-webkit-scrollbar { width: 0; }
+
+/* ── カレンダー ── */
 .cal-nav { display: flex; align-items: center; justify-content: space-between; padding: 20px 20px 12px; }
 .cal-month { font-size: 18px; font-weight: 500; font-variant-numeric: tabular-nums; }
-.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; padding: 0 12px 12px; }
+.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; padding: 0 12px 4px; }
 .cal-day-label { font-size: 10px; color: var(--text3); text-align: center; padding: 6px 0; }
-.cal-day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; font-size: 13px; cursor: pointer; border-radius: 50%; color: var(--text2); transition: background 0.1s; font-variant-numeric: tabular-nums; }
-.cal-day.has-workout { background: var(--accent); color: var(--accent-text); font-weight: 500; }
-.cal-day.today:not(.has-workout) { border: 1px solid var(--text3); color: var(--text); }
-.cal-day.other-month { color: var(--text3); opacity: 0.4; }
-.empty { text-align: center; padding: 60px 24px; color: var(--text3); }
-::-webkit-scrollbar { width: 0; }
+.cal-cell { display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 4px 2px; cursor: pointer; border-radius: 8px; transition: background 0.1s; }
+.cal-cell:active { background: var(--bg3); }
+.cal-num { font-size: 13px; font-variant-numeric: tabular-nums; color: var(--text2); width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; border-radius: 50%; }
+.cal-cell.today .cal-num { border: 1px solid var(--text3); color: var(--text); }
+.cal-cell.other-month .cal-num { color: var(--text3); opacity: 0.4; }
+.cal-dots { display: flex; gap: 2px; flex-wrap: wrap; justify-content: center; min-height: 8px; }
+.cal-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+.cal-legend { display: flex; flex-wrap: wrap; gap: 8px; padding: 8px 16px 16px; }
+.cal-legend-item { display: flex; align-items: center; gap: 4px; font-size: 11px; color: var(--text3); }
+.cal-legend-dot { width: 7px; height: 7px; border-radius: 50%; }
+
+/* ── 記録 ── */
 .rec-date-bar { display: flex; align-items: center; gap: 10px; padding: 14px 16px; border-bottom: 0.5px solid var(--border); background: var(--bg); position: sticky; top: 0; z-index: 4; }
 .rec-date-bar input[type=date] { flex: 1; font-size: 14px; padding: 8px 12px; }
 .ex-card { background: var(--bg2); border: 0.5px solid var(--border); border-radius: var(--radius); margin: 12px 16px 0; overflow: hidden; }
@@ -96,32 +107,46 @@ select option { background: var(--bg3); }
 .set-mini-input:focus { border-color: var(--accent); }
 .set-confirm-btn { background: var(--accent); border: none; border-radius: 6px; width: 28px; height: 36px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
 .set-confirm-btn svg { width: 14px; height: 14px; stroke: var(--accent-text); fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
-.add-set-btn { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--text2); background: none; border: none; cursor: pointer; padding: 10px 0 12px; width: 100%; font-family: inherit; }
 .ex-vol { font-size: 11px; color: var(--text3); padding: 4px 0 10px; display: flex; gap: 12px; }
-.ex-vol span { color: var(--text2); }
 .add-ex-wrap { padding: 10px 16px 24px; }
 .stat-metric { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 0.5px solid var(--border); }
 .stat-metric:last-child { border-bottom: none; }
 .pr-val { font-size: 16px; font-weight: 500; color: var(--accent); font-variant-numeric: tabular-nums; }
 .data-actions { display: flex; gap: 10px; padding: 0 16px 16px; }
 .prev-box { background: var(--blue-dim); border: 0.5px solid rgba(78,168,245,0.2); border-radius: var(--radius-sm); padding: 9px 12px; margin-bottom: 12px; font-size: 12px; color: var(--blue); }
+.empty { text-align: center; padding: 60px 24px; color: var(--text3); }
+
+/* ── トレンドチャート ── */
+.trend-select-wrap { padding: 16px 16px 0; }
+.trend-select-wrap select { font-size: 14px; }
+.trend-chart-wrap { padding: 16px; }
+.trend-svg-wrap { width: 100%; overflow-x: auto; }
+.trend-empty { text-align: center; padding: 32px; color: var(--text3); font-size: 13px; }
+.trend-stat-row { display: flex; justify-content: space-around; padding: 12px 0 4px; border-top: 0.5px solid var(--border); margin-top: 8px; }
+.trend-stat { text-align: center; }
+.trend-stat-label { font-size: 10px; color: var(--text3); letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 4px; }
+.trend-stat-val { font-size: 16px; font-weight: 500; font-variant-numeric: tabular-nums; color: var(--accent); }
 </style>
 </head>
 <body>
 <div id="app">
   <div class="screens">
+
+    <!-- カレンダー -->
     <div class="screen active" id="screen-home">
       <div class="cal-nav">
         <button class="btn-icon" onclick="changeMonth(-1)"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button>
         <span class="cal-month" id="cal-title"></span>
         <button class="btn-icon" onclick="changeMonth(1)"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
       </div>
-      <div class="cal-grid">
+      <div class="cal-grid" id="cal-day-labels">
         <div class="cal-day-label">日</div><div class="cal-day-label">月</div><div class="cal-day-label">火</div><div class="cal-day-label">水</div><div class="cal-day-label">木</div><div class="cal-day-label">金</div><div class="cal-day-label">土</div>
       </div>
       <div class="cal-grid" id="cal-body"></div>
+      <div class="cal-legend" id="cal-legend"></div>
     </div>
 
+    <!-- 記録 -->
     <div class="screen" id="screen-record">
       <div class="rec-date-bar">
         <input type="date" id="record-date" onchange="switchRecordDate()">
@@ -135,12 +160,14 @@ select option { background: var(--bg3); }
       </div>
     </div>
 
+    <!-- 履歴 -->
     <div class="screen" id="screen-history">
       <div class="page-header"><h1>履歴</h1></div>
       <div style="height:12px;"></div>
       <div id="history-list"></div>
     </div>
 
+    <!-- 統計 -->
     <div class="screen" id="screen-stats">
       <div class="page-header"><h1>統計</h1></div>
       <div id="stats-content"></div>
@@ -163,6 +190,7 @@ select option { background: var(--bg3); }
   </nav>
 </div>
 
+<!-- 種目追加モーダル -->
 <div class="modal-overlay" id="modal-add-ex">
   <div class="modal">
     <div class="modal-handle"></div>
@@ -194,6 +222,7 @@ select option { background: var(--bg3); }
   </div>
 </div>
 
+<!-- 日別詳細モーダル -->
 <div class="modal-overlay" id="modal-day">
   <div class="modal">
     <div class="modal-handle"></div>
@@ -208,6 +237,7 @@ select option { background: var(--bg3); }
 
 <script>
 const TAGS = {chest:'胸',back:'背中',legs:'脚',shoulders:'肩',arms:'腕',core:'体幹',cardio:'有酸素'};
+const TAG_COLORS = {chest:'#f5694e',back:'#4ea8f5',legs:'#4ef587',shoulders:'#c8d830',arms:'#f5b44e',core:'#b44ef5',cardio:'#f54eb4'};
 let workouts = [];
 let calY, calM;
 let dayModalDate = null;
@@ -248,14 +278,13 @@ function showScreen(name) {
   if (name==='record') renderRecord();
 }
 
+/* ══ 記録 ══ */
 function renderRecord() {
   const dateEl = document.getElementById('record-date');
   if (!dateEl.value) dateEl.value = todayStr();
   renderExCards(dateEl.value);
 }
-function switchRecordDate() {
-  renderExCards(document.getElementById('record-date').value);
-}
+function switchRecordDate() { renderExCards(document.getElementById('record-date').value); }
 
 function renderExCards(date) {
   const w = getWorkout(date);
@@ -273,13 +302,7 @@ function buildExCard(date, ei, ex) {
   const vol = ex.sets.reduce((s,st)=>s+(parseFloat(st.weight)||0)*(parseInt(st.reps)||0),0);
   let setsHtml = '';
   if (ex.sets.length) {
-    setsHtml += `<div class="set-col-header">
-      <div></div>
-      <div class="set-col-label">kg</div>
-      <div class="set-col-label">reps</div>
-      <div class="set-col-label" style="color:var(--blue);">1RM</div>
-      <div></div>
-    </div>`;
+    setsHtml += `<div class="set-col-header"><div></div><div class="set-col-label">kg</div><div class="set-col-label">reps</div><div class="set-col-label" style="color:var(--blue);">1RM</div><div></div></div>`;
     setsHtml += '<div class="set-list">' + ex.sets.map((st,si) => {
       const r1 = calc1RM(st.weight, st.reps);
       return `<div class="set-item">
@@ -287,9 +310,7 @@ function buildExCard(date, ei, ex) {
         <span class="set-val">${st.weight}</span>
         <span class="set-val">${st.reps}</span>
         <span class="set-rm-val">${r1?r1+'kg':'—'}</span>
-        <button class="set-del-btn" onclick="deleteSet('${date}',${ei},${si})">
-          <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-        </button>
+        <button class="set-del-btn" onclick="deleteSet('${date}',${ei},${si})"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
       </div>`;
     }).join('') + '</div>';
   }
@@ -297,20 +318,18 @@ function buildExCard(date, ei, ex) {
   const prevSet = ex.sets.length ? ex.sets[ex.sets.length-1] : null;
   const prevW = prevSet ? prevSet.weight : '';
   const prevR = prevSet ? prevSet.reps : '';
-  setsHtml += `<div class="set-input-row" id="input-row-${date}-${ei}">
+  setsHtml += `<div class="set-input-row">
     <span class="set-n" style="color:var(--accent);">${nextSet}</span>
     <input class="set-mini-input" type="number" id="wi-${date}-${ei}" placeholder="kg" min="0" step="0.5" inputmode="decimal" value="${prevW}" onfocus="this.select()">
     <input class="set-mini-input" type="number" id="ri-${date}-${ei}" placeholder="回" min="0" step="1" inputmode="numeric" value="${prevR}" onfocus="this.select()" onkeydown="if(event.key==='Enter')confirmSet('${date}',${ei})">
     <span class="set-rm-val" id="live-rm-${date}-${ei}">—</span>
-    <button class="set-confirm-btn" onclick="confirmSet('${date}',${ei})">
-      <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-    </button>
+    <button class="set-confirm-btn" onclick="confirmSet('${date}',${ei})"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></button>
   </div>`;
   setsHtml += `<div class="ex-vol">
     <span>Vol <b style="color:var(--text);font-variant-numeric:tabular-nums;">${vol.toLocaleString()} kg</b></span>
     ${rm?`<span>推定1RM <b style="color:var(--blue);font-variant-numeric:tabular-nums;">${rm} kg</b></span>`:''}
   </div>`;
-  return `<div class="ex-card" id="ex-card-${date}-${ei}">
+  return `<div class="ex-card">
     <div class="ex-card-header">
       <div class="ex-card-title">
         <span style="font-size:15px;font-weight:500;">${ex.name}</span>
@@ -327,15 +346,15 @@ function buildExCard(date, ei, ex) {
 document.addEventListener('input', e => {
   const id = e.target.id;
   const m = id.match(/^(wi|ri)-(.+)-(\d+)$/);
-  if (!m) return;
-  const [,, date, eiStr] = m;
-  const ei = parseInt(eiStr);
-  const w = document.getElementById(`wi-${date}-${ei}`)?.value;
-  const r = document.getElementById(`ri-${date}-${ei}`)?.value;
-  const rm = calc1RM(w, r);
-  const el = document.getElementById(`live-rm-${date}-${ei}`);
-  if (el) el.textContent = rm ? rm+'kg' : '—';
-
+  if (m) {
+    const [,, date, eiStr] = m;
+    const ei = parseInt(eiStr);
+    const w = document.getElementById(`wi-${date}-${ei}`)?.value;
+    const r = document.getElementById(`ri-${date}-${ei}`)?.value;
+    const rm = calc1RM(w, r);
+    const el = document.getElementById(`live-rm-${date}-${ei}`);
+    if (el) el.textContent = rm ? rm+'kg' : '—';
+  }
   if (e.target.id === 'new-ex-name') {
     const name = e.target.value.trim();
     if (!name) { document.getElementById('new-ex-prev').innerHTML=''; return; }
@@ -350,6 +369,7 @@ document.addEventListener('input', e => {
     const tag = workouts.flatMap(w=>w.exercises).find(ex=>ex.name===name);
     if (tag) document.getElementById('new-ex-tag').value = tag.tag;
   }
+  if (e.target.id === 'trend-select') renderTrendChart(e.target.value);
 });
 
 function confirmSet(date, ei) {
@@ -360,33 +380,26 @@ function confirmSet(date, ei) {
   workout.exercises[ei].sets.push({weight: w||'0', reps: r||'0'});
   persist();
   renderExCards(date);
-  setTimeout(() => {
-    const nextW = document.getElementById(`wi-${date}-${ei}`);
-    if (nextW) nextW.focus();
-  }, 50);
+  setTimeout(() => { document.getElementById(`wi-${date}-${ei}`)?.focus(); }, 50);
 }
 
 function deleteSet(date, ei, si) {
-  const w = getWorkout(date);
-  if (!w) return;
+  const w = getWorkout(date); if (!w) return;
   w.exercises[ei].sets.splice(si, 1);
   if (!w.exercises[ei].sets.length) {
     if (!confirm('セットが0になります。種目ごと削除しますか？')) { renderExCards(date); return; }
     w.exercises.splice(ei, 1);
     if (!w.exercises.length) workouts = workouts.filter(wk => wk.date !== date);
   }
-  persist();
-  renderExCards(date);
+  persist(); renderExCards(date);
 }
 
 function deleteExercise(date, ei) {
   if (!confirm('この種目を削除しますか？')) return;
-  const w = getWorkout(date);
-  if (!w) return;
+  const w = getWorkout(date); if (!w) return;
   w.exercises.splice(ei, 1);
   if (!w.exercises.length) workouts = workouts.filter(wk => wk.date !== date);
-  persist();
-  renderExCards(date);
+  persist(); renderExCards(date);
 }
 
 function openAddExModal() {
@@ -406,11 +419,10 @@ function confirmAddEx() {
   const workout = getOrCreate(date);
   if (workout.exercises.some(e=>e.name===name)) { alert('この種目はすでに追加されています'); return; }
   workout.exercises.push({name, tag, sets:[]});
-  persist();
-  closeModal('modal-add-ex');
-  renderExCards(date);
+  persist(); closeModal('modal-add-ex'); renderExCards(date);
 }
 
+/* ══ カレンダー ══ */
 function renderCalendar() {
   const now = new Date();
   if (calY===undefined) { calY=now.getFullYear(); calM=now.getMonth(); }
@@ -418,19 +430,36 @@ function renderCalendar() {
   const first = new Date(calY,calM,1);
   const last = new Date(calY,calM+1,0);
   const ts = now.toISOString().slice(0,10);
-  const wDates = new Set(workouts.map(w=>w.date));
-  let html='';
+
+  // 使用中の部位を収集（凡例用）
+  const usedTags = new Set();
+  workouts.forEach(w => w.exercises.forEach(ex => usedTags.add(ex.tag)));
+
+  let html = '';
   for(let i=0;i<first.getDay();i++){
     const d=new Date(calY,calM,-first.getDay()+i+1);
-    html+=`<div class="cal-day other-month">${d.getDate()}</div>`;
+    html+=`<div class="cal-cell other-month"><div class="cal-num">${d.getDate()}</div><div class="cal-dots"></div></div>`;
   }
   for(let d=1;d<=last.getDate();d++){
     const ds=`${calY}-${String(calM+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-    const cls=[wDates.has(ds)?'has-workout':'',ds===ts?'today':''].filter(Boolean).join(' ');
-    html+=`<div class="cal-day ${cls}" onclick="openDayModal('${ds}')">${d}</div>`;
+    const w = getWorkout(ds);
+    const isToday = ds === ts;
+    const tags = w ? [...new Set(w.exercises.map(e=>e.tag))] : [];
+    const dots = tags.map(t=>`<div class="cal-dot" style="background:${TAG_COLORS[t]};"></div>`).join('');
+    html+=`<div class="cal-cell${isToday?' today':''}" onclick="openDayModal('${ds}')">
+      <div class="cal-num">${d}</div>
+      <div class="cal-dots">${dots}</div>
+    </div>`;
   }
-  document.getElementById('cal-body').innerHTML=html;
+  document.getElementById('cal-body').innerHTML = html;
+
+  // 凡例（使用中の部位のみ表示）
+  const legend = [...usedTags].map(t =>
+    `<div class="cal-legend-item"><div class="cal-legend-dot" style="background:${TAG_COLORS[t]};"></div>${TAGS[t]}</div>`
+  ).join('');
+  document.getElementById('cal-legend').innerHTML = legend;
 }
+
 function changeMonth(d){
   calM+=d;
   if(calM>11){calM=0;calY++;}
@@ -479,6 +508,7 @@ function goEditDay() {
   showScreen('record');
 }
 
+/* ══ 履歴 ══ */
 function renderHistory() {
   const el = document.getElementById('history-list');
   if (!workouts.length) { el.innerHTML='<div class="empty"><div style="font-size:32px;margin-bottom:8px;opacity:0.3;">📋</div><div style="font-size:14px;">記録がありません</div></div>'; return; }
@@ -499,9 +529,11 @@ function renderHistory() {
   }).join('');
 }
 
+/* ══ 統計 ══ */
 function renderStats() {
   const el = document.getElementById('stats-content');
   if (!workouts.length) { el.innerHTML='<div class="empty"><div style="font-size:32px;margin-bottom:8px;opacity:0.3;">📊</div><div style="font-size:14px;">記録がありません</div></div>'; return; }
+
   const prMap = {};
   workouts.forEach(w=>{
     w.exercises.forEach(ex=>{
@@ -513,10 +545,15 @@ function renderStats() {
       if (maxW>prMap[ex.name].maxW) prMap[ex.name].maxW=maxW;
     });
   });
+
   const totalVol = workouts.reduce((s,w)=>s+w.exercises.reduce((ss,ex)=>ss+ex.sets.reduce((sss,st)=>sss+(parseFloat(st.weight)||0)*(parseInt(st.reps)||0),0),0),0);
   const tagVol = {};
   workouts.forEach(w=>w.exercises.forEach(ex=>{ tagVol[ex.tag]=(tagVol[ex.tag]||0)+ex.sets.reduce((s,st)=>s+(parseFloat(st.weight)||0)*(parseInt(st.reps)||0),0); }));
   const maxV = Math.max(...Object.values(tagVol),1);
+
+  // 全種目リスト（記録がある種目のみ）
+  const exNames = Object.keys(prMap);
+
   let html = `<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;padding:16px 16px 4px;">
     <div style="background:var(--bg2);border:0.5px solid var(--border);border-radius:var(--radius);padding:16px;text-align:center;">
       <div style="font-size:10px;color:var(--text3);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:8px;">ワークアウト</div>
@@ -527,6 +564,19 @@ function renderStats() {
       <div style="font-size:24px;font-weight:500;">${(totalVol/1000).toFixed(1)}<span style="font-size:14px;"> t</span></div>
     </div>
   </div>`;
+
+  // ── トレンドチャート ──
+  html += `<div style="padding:20px 16px 8px;font-size:10px;color:var(--text3);letter-spacing:0.08em;text-transform:uppercase;">推定1RM トレンド</div>`;
+  html += `<div class="card">
+    <div style="margin-bottom:12px;">
+      <select id="trend-select" style="font-size:14px;padding:8px 12px;">
+        ${exNames.map(n=>`<option value="${n}">${n}</option>`).join('')}
+      </select>
+    </div>
+    <div id="trend-chart"></div>
+  </div>`;
+
+  // ── PR一覧 ──
   if (Object.keys(prMap).length) {
     html += `<div style="padding:20px 16px 8px;font-size:10px;color:var(--text3);letter-spacing:0.08em;text-transform:uppercase;">推定1RM 自己記録 (Brzycki)</div><div class="card">`;
     Object.entries(prMap).sort((a,b)=>(b[1].rm||0)-(a[1].rm||0)).forEach(([name,pr])=>{
@@ -544,6 +594,8 @@ function renderStats() {
     });
     html += `</div>`;
   }
+
+  // ── 部位別ボリューム ──
   if (Object.keys(tagVol).length) {
     html += `<div style="padding:20px 16px 8px;font-size:10px;color:var(--text3);letter-spacing:0.08em;text-transform:uppercase;">部位別ボリューム</div><div class="card">`;
     Object.entries(tagVol).sort((a,b)=>b[1]-a[1]).forEach(([tag,vol])=>{
@@ -558,6 +610,8 @@ function renderStats() {
     });
     html += `</div>`;
   }
+
+  // ── データ管理 ──
   html += `<div style="padding:20px 16px 8px;font-size:10px;color:var(--text3);letter-spacing:0.08em;text-transform:uppercase;">データ管理</div>
   <div class="data-actions">
     <button class="btn btn-ghost" onclick="exportData()" style="flex:1;justify-content:center;font-size:13px;">
@@ -570,9 +624,99 @@ function renderStats() {
     </button>
     <input type="file" id="import-file" accept=".json" style="display:none" onchange="importData(event)">
   </div><div style="height:32px;"></div>`;
+
   el.innerHTML = html;
+
+  // 初期チャート描画
+  if (exNames.length) renderTrendChart(exNames[0]);
 }
 
+/* ── トレンドチャート描画 ── */
+function renderTrendChart(exName) {
+  const el = document.getElementById('trend-chart');
+  if (!el) return;
+
+  // 種目のデータ収集（日付順）
+  const points = [];
+  workouts.forEach(w => {
+    const ex = w.exercises.find(e => e.name === exName);
+    if (!ex || !ex.sets.length) return;
+    const rm = best1RM(ex.sets);
+    const maxW = Math.max(...ex.sets.map(s=>parseFloat(s.weight)||0));
+    if (rm !== null) points.push({date: w.date, rm, maxW});
+  });
+
+  if (points.length < 2) {
+    el.innerHTML = `<div class="trend-empty">データが2件以上必要です<br><span style="font-size:11px;opacity:0.6;">(現在 ${points.length}件)</span></div>`;
+    return;
+  }
+
+  const W = 320, H = 140, PL = 40, PR = 12, PT = 12, PB = 28;
+  const cW = W - PL - PR, cH = H - PT - PB;
+
+  const rms = points.map(p=>p.rm);
+  const minRM = Math.min(...rms);
+  const maxRM = Math.max(...rms);
+  const rmRange = maxRM - minRM || 1;
+
+  const xStep = cW / (points.length - 1);
+  const yOf = rm => PT + cH - ((rm - minRM) / rmRange) * cH;
+  const xOf = i => PL + i * xStep;
+
+  // Y軸目盛り（3本）
+  const yTicks = [minRM, (minRM+maxRM)/2, maxRM].map(v => Math.round(v*10)/10);
+
+  let svg = `<svg viewBox="0 0 ${W} ${H}" width="100%" style="display:block;overflow:visible;">`;
+
+  // グリッド線
+  yTicks.forEach(v => {
+    const y = yOf(v);
+    svg += `<line x1="${PL}" y1="${y}" x2="${W-PR}" y2="${y}" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>`;
+    svg += `<text x="${PL-4}" y="${y+4}" text-anchor="end" font-size="9" fill="#555" font-family="-apple-system,sans-serif">${v}</text>`;
+  });
+
+  // エリア塗り
+  let areaPath = `M ${xOf(0)} ${yOf(points[0].rm)}`;
+  points.forEach((p,i) => { if(i>0) areaPath += ` L ${xOf(i)} ${yOf(p.rm)}`; });
+  areaPath += ` L ${xOf(points.length-1)} ${H-PB} L ${PL} ${H-PB} Z`;
+  svg += `<path d="${areaPath}" fill="rgba(232,245,78,0.07)"/>`;
+
+  // ライン
+  let linePath = `M ${xOf(0)} ${yOf(points[0].rm)}`;
+  points.forEach((p,i) => { if(i>0) linePath += ` L ${xOf(i)} ${yOf(p.rm)}`; });
+  svg += `<path d="${linePath}" fill="none" stroke="#e8f54e" stroke-width="1.5" stroke-linejoin="round"/>`;
+
+  // ドット＋日付ラベル（多すぎる場合は間引き）
+  const step = points.length > 8 ? Math.ceil(points.length / 8) : 1;
+  points.forEach((p,i) => {
+    const x = xOf(i), y = yOf(p.rm);
+    svg += `<circle cx="${x}" cy="${y}" r="3" fill="#e8f54e"/>`;
+    if (i % step === 0 || i === points.length-1) {
+      const label = p.date.slice(5).replace('-','/');
+      svg += `<text x="${x}" y="${H-PB+14}" text-anchor="middle" font-size="8.5" fill="#555" font-family="-apple-system,sans-serif">${label}</text>`;
+    }
+  });
+
+  svg += `</svg>`;
+
+  // サマリー行
+  const first1RM = points[0].rm;
+  const last1RM = points[points.length-1].rm;
+  const best = Math.max(...rms);
+  const diff = Math.round((last1RM - first1RM)*10)/10;
+  const diffColor = diff >= 0 ? '#4ef587' : '#f5694e';
+  const diffSign = diff >= 0 ? '+' : '';
+
+  svg += `<div class="trend-stat-row">
+    <div class="trend-stat"><div class="trend-stat-label">最高</div><div class="trend-stat-val">${best} kg</div></div>
+    <div class="trend-stat"><div class="trend-stat-label">最新</div><div class="trend-stat-val">${last1RM} kg</div></div>
+    <div class="trend-stat"><div class="trend-stat-label">推移</div><div class="trend-stat-val" style="color:${diffColor};">${diffSign}${diff} kg</div></div>
+  </div>`;
+
+  el.innerHTML = svg;
+}
+
+/* ══ エクスポート / インポート ══ */
 function exportData() {
   const json = JSON.stringify(workouts, null, 2);
   const blob = new Blob([json], {type:'application/json'});
@@ -592,13 +736,10 @@ function importData(e) {
       const existing = new Set(workouts.map(w=>w.date));
       data.forEach(w=>{ if(!existing.has(w.date)) workouts.push(w); });
       workouts.sort((a,b)=>a.date.localeCompare(b.date));
-      persist();
-      alert('インポート完了');
-      renderStats();
+      persist(); alert('インポート完了'); renderStats();
     } catch { alert('ファイル形式が正しくありません'); }
   };
-  reader.readAsText(file);
-  e.target.value='';
+  reader.readAsText(file); e.target.value='';
 }
 
 document.querySelectorAll('.modal-overlay').forEach(m=>{

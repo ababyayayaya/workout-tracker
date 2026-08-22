@@ -92,21 +92,25 @@ select option { background: var(--bg3); }
 .ex-card-title { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 .ex-card-body { padding: 0 14px 4px; }
 .set-list { margin-bottom: 6px; }
-.set-item { display: grid; grid-template-columns: 22px 1fr 1fr 56px 28px; gap: 6px; align-items: center; padding: 5px 0; border-bottom: 0.5px solid var(--border); }
+.set-item { display: grid; grid-template-columns: 20px 1fr 1fr 36px 50px 26px; gap: 5px; align-items: center; padding: 5px 0; border-bottom: 0.5px solid var(--border); }
 .set-item:last-child { border-bottom: none; }
+.set-item.warmup { opacity: 0.55; }
 .set-n { font-size: 11px; color: var(--text3); text-align: center; font-variant-numeric: tabular-nums; }
 .set-val { font-size: 13px; font-variant-numeric: tabular-nums; text-align: center; color: var(--text); }
 .set-rm-val { font-size: 11px; color: var(--blue); text-align: center; font-variant-numeric: tabular-nums; }
+.rir-val { font-size: 11px; color: var(--text2); text-align: center; font-variant-numeric: tabular-nums; }
 .set-del-btn { background: none; border: none; color: var(--text3); cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 4px; }
 .set-del-btn svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; }
-.set-col-header { display: grid; grid-template-columns: 22px 1fr 1fr 56px 28px; gap: 6px; padding: 4px 0 2px; }
+.set-col-header { display: grid; grid-template-columns: 20px 1fr 1fr 36px 50px 26px; gap: 5px; padding: 4px 0 2px; }
 .set-col-label { font-size: 10px; color: var(--text3); text-align: center; letter-spacing: 0.04em; }
-.set-input-row { display: grid; grid-template-columns: 22px 1fr 1fr 56px 28px; gap: 6px; align-items: center; padding: 6px 0; }
+.set-input-row { display: grid; grid-template-columns: 20px 1fr 1fr 36px 50px 26px; gap: 5px; align-items: center; padding: 6px 0; }
 .set-input-row .set-n { color: var(--accent); }
-.set-mini-input { background: var(--bg3); border: 0.5px solid var(--border2); border-radius: 6px; color: var(--text); font-size: 14px; text-align: center; padding: 8px 4px; width: 100%; outline: none; -webkit-appearance: none; font-family: inherit; font-variant-numeric: tabular-nums; }
+.set-mini-input { background: var(--bg3); border: 0.5px solid var(--border2); border-radius: 6px; color: var(--text); font-size: 13px; text-align: center; padding: 8px 2px; width: 100%; outline: none; -webkit-appearance: none; font-family: inherit; font-variant-numeric: tabular-nums; }
 .set-mini-input:focus { border-color: var(--accent); }
-.set-confirm-btn { background: var(--accent); border: none; border-radius: 6px; width: 28px; height: 36px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+.set-confirm-btn { background: var(--accent); border: none; border-radius: 6px; width: 26px; height: 36px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
 .set-confirm-btn svg { width: 14px; height: 14px; stroke: var(--accent-text); fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+.set-type-toggle { background: var(--bg3); border: 0.5px solid var(--border2); border-radius: 99px; color: var(--text2); font-family: inherit; font-size: 11px; padding: 5px 12px; cursor: pointer; }
+.set-type-toggle.is-warmup { background: rgba(245,180,78,0.12); border-color: rgba(245,180,78,0.3); color: var(--c-arms); }
 .ex-vol { font-size: 11px; color: var(--text3); padding: 4px 0 10px; display: flex; gap: 12px; }
 .add-ex-wrap { padding: 10px 16px 24px; }
 .stat-metric { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 0.5px solid var(--border); }
@@ -242,6 +246,10 @@ select option { background: var(--bg3); }
     <div class="modal-body" id="day-content"></div>
     <div class="modal-footer">
       <button class="btn btn-ghost" onclick="closeModal('modal-day')" style="flex:1;justify-content:center;">閉じる</button>
+      <button class="btn btn-ghost" id="day-ai-btn" style="flex:1;justify-content:center;" onclick="openAiModal(dayModalDate)">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 12h8M12 8v8"/><circle cx="12" cy="12" r="9"/></svg>
+        AI用
+      </button>
       <button class="btn btn-accent" id="day-edit-btn" style="flex:1;justify-content:center;" onclick="goEditDay()">編集</button>
     </div>
   </div>
@@ -253,7 +261,8 @@ select option { background: var(--bg3); }
     <div class="modal-handle"></div>
     <div class="modal-title">ChatGPT用テキスト</div>
     <div class="modal-body">
-      <div style="margin-bottom:14px;">
+      <div id="ai-target-label" style="display:none;" class="prev-box"></div>
+      <div id="ai-range-wrap" style="margin-bottom:14px;">
         <label class="form-label">対象範囲</label>
         <select id="ai-range" onchange="renderAiText()">
           <option value="1">直近1回分</option>
@@ -276,6 +285,20 @@ const TAG_COLORS = {chest:'#f5694e',back:'#4ea8f5',legs:'#4ef587',shoulders:'#c8
 let workouts = [];
 let calY, calM;
 let dayModalDate = null;
+let aiTargetDate = null;
+let exNextType = {}; // per-exercise "次に入力するセット種別" (アプリ再起動でリセット)
+
+function workSets(sets) {
+  return sets.filter(s => (s.type||'work') !== 'warmup');
+}
+function getNextType(date, ei) {
+  return exNextType[`${date}|${ei}`] || 'work';
+}
+function toggleSetType(date, ei) {
+  const key = `${date}|${ei}`;
+  exNextType[key] = getNextType(date, ei) === 'work' ? 'warmup' : 'work';
+  renderExCards(date);
+}
 
 function loadData() {
   try { const d = localStorage.getItem('wt_workouts'); if(d) workouts = JSON.parse(d); } catch(e) { workouts=[]; }
@@ -316,9 +339,10 @@ function getExerciseType(name) {
 /* セッション内でのその種目の「代表値」を返す（通常=推定1RM最大、アシスト=最小アシスト重量） */
 function sessionMetric(ex) {
   const isAssist = (ex.type||'normal') === 'assist';
+  const ws = workSets(ex.sets);
   return isAssist
-    ? {isAssist:true, value: minAssist(ex.sets), label:'最小アシスト'}
-    : {isAssist:false, value: best1RM(ex.sets), label:'推定1RM'};
+    ? {isAssist:true, value: minAssist(ws), label:'最小アシスト'}
+    : {isAssist:false, value: best1RM(ws), label:'推定1RM'};
 }
 function todayStr() { return new Date().toISOString().slice(0,10); }
 function closeModal(id) { document.getElementById(id).classList.remove('open'); }
@@ -355,21 +379,25 @@ function renderExCards(date) {
 
 function buildExCard(date, ei, ex) {
   const isAssist = (ex.type||'normal') === 'assist';
-  const rm = isAssist ? null : best1RM(ex.sets);
-  const minA = isAssist ? minAssist(ex.sets) : null;
-  const reps = totalReps(ex.sets);
-  const vol = ex.sets.reduce((s,st)=>s+(parseFloat(st.weight)||0)*(parseInt(st.reps)||0),0);
+  const ws = workSets(ex.sets);
+  const rm = isAssist ? null : best1RM(ws);
+  const minA = isAssist ? minAssist(ws) : null;
+  const reps = totalReps(ws);
+  const vol = ws.reduce((s,st)=>s+(parseFloat(st.weight)||0)*(parseInt(st.reps)||0),0);
+  const warmupCount = ex.sets.length - ws.length;
   const wLabel = isAssist ? 'assist' : 'kg';
   const metricLabel = isAssist ? '' : '1RM';
   let setsHtml = '';
   if (ex.sets.length) {
-    setsHtml += `<div class="set-col-header"><div></div><div class="set-col-label">${wLabel}</div><div class="set-col-label">reps</div><div class="set-col-label" style="color:var(--blue);">${metricLabel}</div><div></div></div>`;
+    setsHtml += `<div class="set-col-header"><div></div><div class="set-col-label">${wLabel}</div><div class="set-col-label">reps</div><div class="set-col-label">RIR</div><div class="set-col-label" style="color:var(--blue);">${metricLabel}</div><div></div></div>`;
     setsHtml += '<div class="set-list">' + ex.sets.map((st,si) => {
       const r1 = isAssist ? null : calc1RM(st.weight, st.reps);
-      return `<div class="set-item">
-        <span class="set-n">${si+1}</span>
+      const isWarm = (st.type||'work') === 'warmup';
+      return `<div class="set-item${isWarm?' warmup':''}">
+        <span class="set-n">${si+1}${isWarm?'<sup style="font-size:8px;">up</sup>':''}</span>
         <span class="set-val">${st.weight}</span>
         <span class="set-val">${st.reps}</span>
+        <span class="rir-val">${(st.rir!=null&&st.rir!=='')?st.rir:'—'}</span>
         <span class="set-rm-val">${r1?r1+'kg':'—'}</span>
         <button class="set-del-btn" onclick="deleteSet('${date}',${ei},${si})"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
       </div>`;
@@ -379,22 +407,30 @@ function buildExCard(date, ei, ex) {
   const prevSet = ex.sets.length ? ex.sets[ex.sets.length-1] : null;
   const prevW = prevSet ? prevSet.weight : '';
   const prevR = prevSet ? prevSet.reps : '';
+  const nextType = getNextType(date, ei);
+  setsHtml += `<div style="display:flex;justify-content:flex-end;margin:6px 0 2px;">
+    <button class="set-type-toggle${nextType==='warmup'?' is-warmup':''}" onclick="toggleSetType('${date}',${ei})">${nextType==='warmup'?'アップ入力中':'ワークセット入力中'}</button>
+  </div>`;
   setsHtml += `<div class="set-input-row">
     <span class="set-n" style="color:var(--accent);">${nextSet}</span>
     <input class="set-mini-input" type="number" id="wi-${date}-${ei}" placeholder="${wLabel}" min="0" step="0.5" inputmode="decimal" value="${prevW}" onfocus="this.select()">
     <input class="set-mini-input" type="number" id="ri-${date}-${ei}" placeholder="回" min="0" step="1" inputmode="numeric" value="${prevR}" onfocus="this.select()" onkeydown="if(event.key==='Enter')confirmSet('${date}',${ei})">
+    <input class="set-mini-input" type="number" id="rir-${date}-${ei}" placeholder="RIR" min="0" max="10" step="0.5" inputmode="decimal" onkeydown="if(event.key==='Enter')confirmSet('${date}',${ei})">
     <span class="set-rm-val" id="live-rm-${date}-${ei}">${isAssist?'':'—'}</span>
     <button class="set-confirm-btn" onclick="confirmSet('${date}',${ei})"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></button>
   </div>`;
+  const warmupNote = warmupCount ? `<span style="color:var(--text3);">（アップ${warmupCount}セット除く）</span>` : '';
   if (isAssist) {
     setsHtml += `<div class="ex-vol">
       <span>総reps <b style="color:var(--text);font-variant-numeric:tabular-nums;">${reps}</b></span>
       ${minA!==null?`<span>最小アシスト <b style="color:var(--blue);font-variant-numeric:tabular-nums;">${minA} kg</b></span>`:''}
+      ${warmupNote}
     </div>`;
   } else {
     setsHtml += `<div class="ex-vol">
       <span>Vol <b style="color:var(--text);font-variant-numeric:tabular-nums;">${vol.toLocaleString()} kg</b></span>
       ${rm?`<span>推定1RM <b style="color:var(--blue);font-variant-numeric:tabular-nums;">${rm} kg</b></span>`:''}
+      ${warmupNote}
     </div>`;
   }
   return `<div class="ex-card">
@@ -438,14 +474,15 @@ document.addEventListener('input', e => {
     if (!prev) { document.getElementById('new-ex-prev').innerHTML=''; return; }
     const ex = prev.exercises.find(e=>e.name===name);
     const isAssist = (ex.type||'normal') === 'assist';
+    const ws = workSets(ex.sets);
     const dt = new Date(prev.date+'T00:00:00').toLocaleDateString('ja-JP',{month:'numeric',day:'numeric'});
     if (isAssist) {
-      const minA = minAssist(ex.sets);
+      const minA = minAssist(ws);
       document.getElementById('new-ex-prev').innerHTML =
         `<div class="prev-box" style="margin-top:10px;">前回 ${dt} — 最小アシスト ${minA!==null?minA+'kg':'—'}</div>`;
     } else {
-      const rm2 = best1RM(ex.sets);
-      const maxW = Math.max(...ex.sets.map(s=>parseFloat(s.weight)||0));
+      const rm2 = best1RM(ws);
+      const maxW = ws.length ? Math.max(...ws.map(s=>parseFloat(s.weight)||0)) : 0;
       document.getElementById('new-ex-prev').innerHTML =
         `<div class="prev-box" style="margin-top:10px;">前回 ${dt} — 最大 ${maxW}kg${rm2?` / 推定1RM ${rm2}kg`:''}</div>`;
     }
@@ -458,9 +495,15 @@ document.addEventListener('input', e => {
 function confirmSet(date, ei) {
   const w = document.getElementById(`wi-${date}-${ei}`)?.value;
   const r = document.getElementById(`ri-${date}-${ei}`)?.value;
+  const rirRaw = document.getElementById(`rir-${date}-${ei}`)?.value;
   if (!w && !r) return;
   const workout = getOrCreate(date);
-  workout.exercises[ei].sets.push({weight: w||'0', reps: r||'0'});
+  workout.exercises[ei].sets.push({
+    weight: w||'0',
+    reps: r||'0',
+    rir: (rirRaw !== undefined && rirRaw !== '') ? rirRaw : null,
+    type: getNextType(date, ei)
+  });
   persist();
   renderExCards(date);
   setTimeout(() => { document.getElementById(`wi-${date}-${ei}`)?.focus(); }, 50);
@@ -556,14 +599,18 @@ function openDayModal(dateStr) {
   const dt = new Date(dateStr+'T00:00:00').toLocaleDateString('ja-JP',{year:'numeric',month:'long',day:'numeric',weekday:'short'});
   document.getElementById('day-title').textContent = dt;
   document.getElementById('day-edit-btn').style.display = w ? '' : 'none';
+  const aiBtn = document.getElementById('day-ai-btn');
+  if (aiBtn) aiBtn.style.display = w ? '' : 'none';
   if (!w) {
     document.getElementById('day-content').innerHTML = '<p style="color:var(--text3);font-size:14px;padding-bottom:8px;">この日の記録はありません</p>';
   } else {
     document.getElementById('day-content').innerHTML = w.exercises.map((ex,i) => {
       const isAssist = (ex.type||'normal') === 'assist';
-      const vol = ex.sets.reduce((s,st)=>s+(parseFloat(st.weight)||0)*(parseInt(st.reps)||0),0);
-      const rm = isAssist ? null : best1RM(ex.sets);
-      const minA = isAssist ? minAssist(ex.sets) : null;
+      const ws = workSets(ex.sets);
+      const vol = ws.reduce((s,st)=>s+(parseFloat(st.weight)||0)*(parseInt(st.reps)||0),0);
+      const rm = isAssist ? null : best1RM(ws);
+      const minA = isAssist ? minAssist(ws) : null;
+      const warmupCount = ex.sets.length - ws.length;
       return `<div style="padding:12px 0;border-bottom:0.5px solid var(--border);">
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
           <span style="font-size:12px;color:var(--text3);">${String(i+1).padStart(2,'0')}</span>
@@ -574,13 +621,16 @@ function openDayModal(dateStr) {
         <div style="display:flex;flex-wrap:wrap;gap:5px;">
           ${ex.sets.map((st,si)=>{
             const r1 = isAssist ? null : calc1RM(st.weight,st.reps);
-            return `<span style="font-size:12px;background:var(--bg3);padding:4px 8px;border-radius:99px;color:var(--text2);">${si+1}. ${st.weight}kg×${st.reps}${r1?`<span style="color:var(--blue);"> →${r1}</span>`:''}`;
+            const isWarm = (st.type||'work')==='warmup';
+            const rirTxt = (st.rir!=null&&st.rir!=='') ? ` RIR${st.rir}` : '';
+            return `<span style="font-size:12px;background:var(--bg3);padding:4px 8px;border-radius:99px;color:${isWarm?'var(--text3)':'var(--text2)'};">${si+1}${isWarm?'(up)':''}. ${st.weight}kg×${st.reps}${rirTxt}${r1?`<span style="color:var(--blue);"> →${r1}</span>`:''}`;
           }).join('')}
         </div>
         <div style="display:flex;gap:12px;margin-top:8px;font-size:12px;color:var(--text3);">
           ${isAssist
-            ? `<span>総reps <b style="color:var(--text2);">${totalReps(ex.sets)}</b></span>${minA!==null?`<span>最小アシスト <b style="color:var(--blue);">${minA} kg</b></span>`:''}`
+            ? `<span>総reps <b style="color:var(--text2);">${totalReps(ws)}</b></span>${minA!==null?`<span>最小アシスト <b style="color:var(--blue);">${minA} kg</b></span>`:''}`
             : `<span>Vol <b style="color:var(--text2);">${vol.toLocaleString()} kg</b></span>${rm?`<span>推定1RM <b style="color:var(--blue);">${rm} kg</b></span>`:''}`}
+          ${warmupCount?`<span>（アップ${warmupCount}セット除く）</span>`:''}
         </div>
       </div>`;
     }).join('');
@@ -624,26 +674,27 @@ function renderStats() {
   const prMap = {};
   workouts.forEach(w=>{
     w.exercises.forEach(ex=>{
-      if (!ex.sets.length) return;
+      const ws = workSets(ex.sets);
+      if (!ws.length) return;
       const isAssist = (ex.type||'normal') === 'assist';
       if (!prMap[ex.name]) prMap[ex.name] = isAssist
         ? {isAssist:true, minA:null, date:w.date, tag:ex.tag}
         : {isAssist:false, rm:null, maxW:0, date:w.date, tag:ex.tag};
       if (isAssist) {
-        const minA = minAssist(ex.sets);
+        const minA = minAssist(ws);
         if (minA!==null && (prMap[ex.name].minA===null || minA<prMap[ex.name].minA)) { prMap[ex.name].minA=minA; prMap[ex.name].date=w.date; }
       } else {
-        const rm = best1RM(ex.sets);
-        const maxW = Math.max(...ex.sets.map(s=>parseFloat(s.weight)||0));
+        const rm = best1RM(ws);
+        const maxW = Math.max(...ws.map(s=>parseFloat(s.weight)||0));
         if (rm!==null&&(prMap[ex.name].rm===null||rm>prMap[ex.name].rm)) { prMap[ex.name].rm=rm; prMap[ex.name].date=w.date; }
         if (maxW>prMap[ex.name].maxW) prMap[ex.name].maxW=maxW;
       }
     });
   });
 
-  const totalVol = workouts.reduce((s,w)=>s+w.exercises.reduce((ss,ex)=>ss+ex.sets.reduce((sss,st)=>sss+(parseFloat(st.weight)||0)*(parseInt(st.reps)||0),0),0),0);
+  const totalVol = workouts.reduce((s,w)=>s+w.exercises.reduce((ss,ex)=>ss+workSets(ex.sets).reduce((sss,st)=>sss+(parseFloat(st.weight)||0)*(parseInt(st.reps)||0),0),0),0);
   const tagVol = {};
-  workouts.forEach(w=>w.exercises.forEach(ex=>{ tagVol[ex.tag]=(tagVol[ex.tag]||0)+ex.sets.reduce((s,st)=>s+(parseFloat(st.weight)||0)*(parseInt(st.reps)||0),0); }));
+  workouts.forEach(w=>w.exercises.forEach(ex=>{ tagVol[ex.tag]=(tagVol[ex.tag]||0)+workSets(ex.sets).reduce((s,st)=>s+(parseFloat(st.weight)||0)*(parseInt(st.reps)||0),0); }));
   const maxV = Math.max(...Object.values(tagVol),1);
 
   const exNames = Object.keys(prMap);
@@ -814,23 +865,48 @@ function renderTrendChart(exName) {
 }
 
 /* ══ AI連携（ChatGPT用テキスト生成） ══ */
-function openAiModal() {
+function openAiModal(dateStr = null) {
+  aiTargetDate = dateStr || null;
+  const labelEl = document.getElementById('ai-target-label');
+  const rangeWrap = document.getElementById('ai-range-wrap');
+  if (aiTargetDate) {
+    const w = getWorkout(aiTargetDate);
+    if (!w) { alert('この日の記録はありません'); return; }
+    const dt = new Date(aiTargetDate+'T00:00:00').toLocaleDateString('ja-JP',{year:'numeric',month:'long',day:'numeric',weekday:'short'});
+    labelEl.textContent = `対象: ${dt} の記録`;
+    labelEl.style.display = '';
+    rangeWrap.style.display = 'none';
+  } else {
+    labelEl.style.display = 'none';
+    rangeWrap.style.display = '';
+  }
   document.getElementById('modal-ai').classList.add('open');
   renderAiText();
 }
 
 function buildAiText() {
   if (!workouts.length) return 'まだ記録がありません。';
-  const n = parseInt(document.getElementById('ai-range').value) || 1;
-  const targets = workouts.slice(-n); // 直近n件（日付昇順）
+  let targets;
+  if (aiTargetDate) {
+    const w = getWorkout(aiTargetDate);
+    targets = w ? [w] : [];
+  } else {
+    const n = parseInt(document.getElementById('ai-range').value) || 1;
+    targets = workouts.slice(-n); // 直近n件（日付昇順）
+  }
+  if (!targets.length) return 'この範囲に記録がありません。';
 
   const hasAssist = targets.some(w => w.exercises.some(ex => (ex.type||'normal')==='assist'));
+  const hasRir = targets.some(w => w.exercises.some(ex => ex.sets.some(st => st.rir!=null && st.rir!=='')));
+  const hasWarmup = targets.some(w => w.exercises.some(ex => ex.sets.some(st => (st.type||'work')==='warmup')));
 
-  let text = `以下は私の直近${targets.length}回分のトレーニング記録です。\n`;
-  text += `重量(kg)×回数、各セットの推定1RM（Brzyckiの式）、前回同種目との比較を記載しています。\n`;
-  if (hasAssist) {
-    text += `※「アシスト」種目はマシンの補助重量です。重量が軽いほど高負荷・高難度で、値が減少していれば進歩を意味します。\n`;
-  }
+  let text = aiTargetDate
+    ? `以下は私の該当日のトレーニング記録です。\n`
+    : `以下は私の直近${targets.length}回分のトレーニング記録です。\n`;
+  text += `各セットは「重量(kg) × 回数」の生データです。\n`;
+  if (hasWarmup) text += `「アップ」はウォームアップセットで、Vol・最大重量などの集計には含めていません。\n`;
+  if (hasRir) text += `RIRは入力がある場合のみ記載しています。記載がないセットはRIRのデータなしという意味なので、0など決めつけず、メニュー作成の判断材料に使わないでください。\n`;
+  if (hasAssist) text += `「アシスト」種目はマシンの補助重量です。重量が軽いほど高負荷・高難度で、値が減少していれば進歩を意味します。\n`;
   text += `この内容を踏まえて、次回のトレーニングメニュー（種目・重量・回数）を提案してください。\n`;
   text += `\n` + '─'.repeat(28) + `\n`;
 
@@ -840,20 +916,26 @@ function buildAiText() {
     if (!w.exercises.length) { text += `（記録なし）\n`; return; }
     w.exercises.forEach(ex => {
       const isAssist = (ex.type||'normal') === 'assist';
+      const ws = workSets(ex.sets);
+      const warmupCount = ex.sets.length - ws.length;
       text += `■ ${ex.name}（${TAGS[ex.tag]}${isAssist?'・アシスト種目':''}）\n`;
 
-      if (isAssist) {
-        ex.sets.forEach((st,si) => {
-          text += `  ${si+1}. アシスト${st.weight}kg × ${st.reps}回\n`;
-        });
-        const minA = minAssist(ex.sets);
-        text += `  最小アシスト: ${minA!==null?minA+'kg':'—'}（総reps ${totalReps(ex.sets)}）\n`;
+      ex.sets.forEach((st,si) => {
+        const isWarm = (st.type||'work') === 'warmup';
+        const rirTxt = (st.rir!=null && st.rir!=='') ? ` RIR${st.rir}` : '';
+        const label = isAssist ? `アシスト${st.weight}kg` : `${st.weight}kg`;
+        text += `  ${si+1}. ${label} × ${st.reps}回${rirTxt}${isWarm?'（アップ）':''}\n`;
+      });
 
-        const prevWorkout = [...workouts].filter(pw => pw.date < w.date).reverse()
-          .find(pw => pw.exercises.some(pe => pe.name === ex.name));
-        if (prevWorkout) {
-          const prevEx = prevWorkout.exercises.find(pe => pe.name === ex.name);
-          const prevMinA = minAssist(prevEx.sets);
+      const prevWorkout = [...workouts].filter(pw => pw.date < w.date).reverse()
+        .find(pw => pw.exercises.some(pe => pe.name === ex.name));
+      const prevWs = prevWorkout ? workSets(prevWorkout.exercises.find(pe => pe.name === ex.name).sets) : null;
+
+      if (isAssist) {
+        const minA = minAssist(ws);
+        text += `  ワークセット計: 最小アシスト ${minA!==null?minA+'kg':'—'}${warmupCount?`（アップ${warmupCount}セット除く）`:''}\n`;
+        if (prevWs) {
+          const prevMinA = minAssist(prevWs);
           if (minA !== null && prevMinA !== null) {
             const diff = Math.round((minA - prevMinA) * 10) / 10;
             const sign = diff >= 0 ? '+' : '';
@@ -862,23 +944,15 @@ function buildAiText() {
           }
         }
       } else {
-        const rm = best1RM(ex.sets);
-        const vol = ex.sets.reduce((s,st)=>s+(parseFloat(st.weight)||0)*(parseInt(st.reps)||0),0);
-        ex.sets.forEach((st,si) => {
-          const r1 = calc1RM(st.weight, st.reps);
-          text += `  ${si+1}. ${st.weight}kg × ${st.reps}回${r1?`（推定1RM ${r1}kg）`:''}\n`;
-        });
-        text += `  Vol: ${vol.toLocaleString()}kg${rm?` / 推定1RM: ${rm}kg`:''}\n`;
-
-        const prevWorkout = [...workouts].filter(pw => pw.date < w.date).reverse()
-          .find(pw => pw.exercises.some(pe => pe.name === ex.name));
-        if (prevWorkout) {
-          const prevEx = prevWorkout.exercises.find(pe => pe.name === ex.name);
-          const prevRm = best1RM(prevEx.sets);
-          if (rm !== null && prevRm !== null) {
-            const diff = Math.round((rm - prevRm) * 10) / 10;
+        const vol = ws.reduce((s,st)=>s+(parseFloat(st.weight)||0)*(parseInt(st.reps)||0),0);
+        const maxW = ws.length ? Math.max(...ws.map(s=>parseFloat(s.weight)||0)) : null;
+        text += `  ワークセット計: Vol ${vol.toLocaleString()}kg${maxW!==null?` / 最大重量 ${maxW}kg`:''}${warmupCount?`（アップ${warmupCount}セット除く）`:''}\n`;
+        if (prevWs) {
+          const prevMaxW = prevWs.length ? Math.max(...prevWs.map(s=>parseFloat(s.weight)||0)) : null;
+          if (maxW !== null && prevMaxW !== null) {
+            const diff = Math.round((maxW - prevMaxW) * 10) / 10;
             const sign = diff >= 0 ? '+' : '';
-            text += `  前回(${prevWorkout.date.slice(5)})比 1RM: ${sign}${diff}kg\n`;
+            text += `  前回(${prevWorkout.date.slice(5)})比 最大重量: ${sign}${diff}kg\n`;
           }
         }
       }
@@ -887,7 +961,7 @@ function buildAiText() {
   });
 
   text += '─'.repeat(28) + `\n`;
-  text += `\n上記を踏まえて、次回のトレーニングメニューを重量・回数付きで作成してください。`;
+  text += `\n上記の生データ（重量・回数・RIR・アップ/ワーク区分）を踏まえて、次回のトレーニングメニューを重量・回数付きで作成してください。`;
 
   return text;
 }
